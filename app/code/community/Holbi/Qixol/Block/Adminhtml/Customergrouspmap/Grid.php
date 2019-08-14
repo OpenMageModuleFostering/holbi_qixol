@@ -4,7 +4,7 @@ class Holbi_Qixol_Block_Adminhtml_Customergrouspmap_Grid extends Mage_Adminhtml_
     public function __construct() {
         parent::__construct();
         $this->setId('customergrouspmapGrid');
-        $this->setDefaultSort('customer_group_name_map');
+        $this->setDefaultSort('integration_code');
         $this->setDefaultDir('ASC');
         $this->setSaveParametersInSession(true);
     }
@@ -46,7 +46,7 @@ class Holbi_Qixol_Block_Adminhtml_Customergrouspmap_Grid extends Mage_Adminhtml_
 
         
         $this->addColumn('customer_group_name', array(
-            'header'        => $hlp->__('Customer Group Name Magento:'),
+            'header'        => $hlp->__('Customer Group'),
             'type'          => 'customer',
             'align'         => 'left',
             'width' => '250px',
@@ -57,10 +57,10 @@ class Holbi_Qixol_Block_Adminhtml_Customergrouspmap_Grid extends Mage_Adminhtml_
 
 
 
-        $this->addColumn('customer_group_name_map', array(
-            'header' => $hlp->__('Customer Group  Name To'),
+        $this->addColumn('integration_code', array(
+            'header' => $hlp->__('Integration Code'),
             'width' => '350px',
-            'index' => 'customer_group_name_map'
+            'index' => 'integration_code'
         ));
 
         $this->addColumn('action',

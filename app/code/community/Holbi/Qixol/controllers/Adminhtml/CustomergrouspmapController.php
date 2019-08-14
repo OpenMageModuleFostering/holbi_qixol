@@ -4,7 +4,7 @@ class Holbi_Qixol_Adminhtml_CustomergrouspmapController extends Mage_Adminhtml_C
     protected function _initAction() {
         $this->loadLayout()
                 ->_setActiveMenu('qixol/customergrouspmap')
-                ->_addBreadcrumb(Mage::helper('qixol')->__('Customer Groups Map'), Mage::helper('qixol')->__('Customer Groups Map'));
+                ->_addBreadcrumb(Mage::helper('qixol')->__('Customer Group Integration Codes'), Mage::helper('qixol')->__('Customer Group Integration Codes'));
 
         return $this;
     }
@@ -30,7 +30,7 @@ class Holbi_Qixol_Adminhtml_CustomergrouspmapController extends Mage_Adminhtml_C
             $this->loadLayout();
             $this->_setActiveMenu('qixol/customergrouspmap');
 
-            $this->_addBreadcrumb(Mage::helper('qixol')->__('Customer Group Map'), Mage::helper('qixol')->__('Customer Group Map'));
+            $this->_addBreadcrumb(Mage::helper('qixol')->__('Customer Group Integration Codes'), Mage::helper('qixol')->__('Customer Group Integration Codes'));
 
             $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 

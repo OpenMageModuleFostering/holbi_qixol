@@ -9,7 +9,7 @@
   </default>
   <modules>
     <Holbi_Qixol>
-      <version>0.1.0</version>
+      <version>0.2.0</version>
     </Holbi_Qixol>
   </modules>
   <global>
@@ -88,12 +88,10 @@
         <banner>
             <table>qixol_banners</table>
         </banner>
-        <bannerimages>
-            <table>qixol_banner_images</table>
-        </bannerimages>
-        <bannertoimage>
-            <table>qixol_banner_has_images</table>
-          </bannertoimage>
+        <bannerimage>
+            <table>qixol_banner_image</table>
+            <!--<table>admin_user</table>-->
+        </bannerimage>
         <sticker>
             <table>qixol_stickers</table>
         </sticker>
@@ -103,12 +101,9 @@
         <exprpocessstat>
             <table>qixol_process_export_status_table</table>
         </exprpocessstat>        
-        <exportstat>
-            <table>qixol_product_export_stat</table>
-        </exportstat>        
-			  <deletedproduct>
-				<table>qixol_product_to_delete</table>
-			  </deletedproduct>
+        <deletedproduct>
+            <table>qixol_product_to_delete</table>
+        </deletedproduct>
         <customergrouspmap>
         <table>qixol_customers_groups_name_map</table>
         </customergrouspmap>
@@ -261,44 +256,46 @@
   <adminhtml>
 	<menu>
 	  <qixol module="qixol">
-		<title>Qixol</title>
+		<title>Qixol Promo</title>
 		<sort_order>100</sort_order>
 		<children>
       <banner module="qixol">
-          <title>Manage Banners</title>
-          <sort_order>1</sort_order>
+          <title>Banners</title>
+          <sort_order>2</sort_order>
           <action>qixol_admin/adminhtml_banner</action>
       </banner>
       <sticker module="qixol">
-          <title>Manage Stickers</title>
+          <title>Stickers</title>
           <sort_order>1</sort_order>
           <action>qixol_admin/adminhtml_sticker</action>
       </sticker>
       <bannerboxes module="qixol">
-          <title>Manage Banner Position</title>
-          <sort_order>5</sort_order>
+          <title>Banner Position</title>
+          <sort_order>3</sort_order>
           <action>qixol_admin/adminhtml_bannerboxes</action>
       </bannerboxes>      
-		  <qixolbackend module="qixol">
+<!--
+      <qixolbackend module="qixol">
 			<title>Qixol</title>
 			<sort_order>3</sort_order>
 			<action>qixol_admin/adminhtml_qixolbackend</action>
-		  </qixolbackend>    
+		  </qixolbackend>
+-->
+      <customergrouspmap module="qixol">
+          <title>Customer Group Integration Codes</title>
+          <sort_order>4</sort_order>
+          <action>qixol_admin/adminhtml_customergrouspmap</action>
+      </customergrouspmap>               
       <shippingmap module="qixol">
-          <title>Manage Shippings Map</title>
-          <sort_order>15</sort_order>
+          <title>Shipping Method Integration Codes</title>
+          <sort_order>5</sort_order>
           <action>qixol_admin/adminhtml_shippingmap</action>
       </shippingmap> 
       <storesmap module="qixol">
-          <title>Manage Stores Map</title>
-          <sort_order>15</sort_order>
+          <title>Store Integration Codes</title>
+          <sort_order>6</sort_order>
           <action>qixol_admin/adminhtml_storesmap</action>
       </storesmap> 
-      <customergrouspmap module="qixol">
-          <title>Customer Groups Map</title>
-          <sort_order>25</sort_order>
-          <action>qixol_admin/adminhtml_customergrouspmap</action>
-      </customergrouspmap>               
 		</children>
 	  </qixol>
 
@@ -323,11 +320,11 @@
 		<admin>
 		  <children>
 			<qixol translate="title" module="qixol">
-			  <title>Qixol</title>
+			  <title>Qixol Promo</title>
 			  <sort_order>1000</sort_order>
 			  <children>
 		  <qixolbackend translate="title">
-			<title>Qixol</title>
+			<title>Qixol Promo</title>
 		  </qixolbackend>
 			  </children>
 			</qixol>

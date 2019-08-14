@@ -75,15 +75,6 @@ class Holbi_Qixol_Adminhtml_StickerController extends Mage_Adminhtml_Controller_
             }
         }
         if ($data = $this->getRequest()->getPost()) {
-            if ($data['use_default_banner_group']=='1'){
-                 $data['unique_banner_group']='';
-            }else {
-                 $data['default_banner_group']='';
-            }
-
-            if (is_array($data['banner_link_name'])){
-              $data['banner_link_name']=join(",",$data['banner_link_name']);
-             }
             if (!empty($imagedata['filename'])) {
                 $data['filename'] = $imagedata['filename'];
             } else {
@@ -102,13 +93,6 @@ class Holbi_Qixol_Adminhtml_StickerController extends Mage_Adminhtml_Controller_
                     ->setId($this->getRequest()->getParam('id'));
 
             try {
-                if ($model->getCreatedTime == NULL || $model->getUpdateTime() == NULL) {
-                    $model->setCreatedTime(now())
-                            ->setUpdateTime(now());
-                } else {
-                    $model->setUpdateTime(now());
-                }
-
                 $model->save();
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('qixol')->__('Item was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);

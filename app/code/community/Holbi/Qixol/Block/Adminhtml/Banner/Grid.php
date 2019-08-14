@@ -23,59 +23,19 @@ class Holbi_Qixol_Block_Adminhtml_Banner_Grid extends Holbi_Qixol_Block_Adminhtm
             'index' => 'banner_id',
         ));
 
-        /*$this->addColumn('filename', array(
-            'header' => Mage::helper('qixol')->__('Image'),
-            'align' => 'center',
-            'index' => 'filename',
-            'type' => 'banner',
-            'escape' => true,
-            'sortable' => false,
-            'width' => '150px',
-        ));*/
-
         $this->addColumn('title', array(
             'header' => Mage::helper('qixol')->__('Title'),
             'width' => '150px',
             'index' => 'title',
         ));
 
-        $this->addColumn('banner_link_name', array(
+        $this->addColumn('display_zone', array(
             'header' => Mage::helper('qixol')->__('Display Zone'),
             'width' => '250px',
-            'index' => 'banner_link_name',
+            'index' => 'display_zone',
         ));        
 
-
-        $this->addColumn('banner_group', array(
-            'header' => Mage::helper('qixol')->__('Promotion Ref'),
-            'width' => '250px',
-            'index' => 'banner_group',
-        ));   
-
-        /*$this->addColumn('banner_group', array(
-            'header' => Mage::helper('qixol')->__('Promotion Ref'),
-            'width' => '100px',
-            'index' => 'banner_group',
-            'type' => 'options',
-            'options' => array(
-                '' => Mage::helper('qixol')->__('Not defined'),
-                'BOGOF' => Mage::helper('qixol')->__('Buy one get one free'),
-                'BOGOR' => Mage::helper('qixol')->__('Buy one get one reduced'),
-                'BUNDLE' => Mage::helper('qixol')->__('Bundle'),
-                'DEAL' => Mage::helper('qixol')->__('Deal'),
-                'FREEPRODUCT' => Mage::helper('qixol')->__('Free product'),
-                'ISSUECOUPON' => Mage::helper('qixol')->__('Issue coupon'),
-
-                'ISSUEPOINTS' => Mage::helper('qixol')->__('Issue points'),
-                'BASKETREDUCTION' => Mage::helper('qixol')->__('Basket reduction'),
-                'DELIVERYREDUCTION' => Mage::helper('qixol')->__('Delivery coupon'),
-
-                /*7 => 'Issue points',
-                8 => 'Multiple promos',*/
-                /*'PRODUCTSREDUCTION' => Mage::helper('qixol')->__('Product reduction'),
-            ),
-        ));*/
-
+        /* TODO: should use the Holbi_Qixol_Model_Status class for this? */
         $this->addColumn('status', array(
             'header' => Mage::helper('qixol')->__('Status'),
             'align' => 'left',
@@ -83,29 +43,10 @@ class Holbi_Qixol_Block_Adminhtml_Banner_Grid extends Holbi_Qixol_Block_Adminhtm
             'index' => 'status',
             'type' => 'options',
             'options' => array(
-                1 => 'Enabled',
                 0 => 'Disabled',
+                1 => 'Enabled',
             ),
         ));
-
-        $this->addColumn('sort_order', array(
-            'header' => Mage::helper('qixol')->__('Sort Order'),
-            'width' => '80px',
-            'index' => 'sort_order',
-            'align' => 'center',
-        ));
-
-        /*$this->addColumn('is_default', array(
-            'header' => Mage::helper('qixol')->__('Default?'),
-            'align' => 'left',
-            'width' => '80px',
-            'index' => 'is_default',
-            'type' => 'options',
-            'options' => array(
-                1 => 'Yes',
-                0 => 'No',
-            ),
-        ));*/
 
         $this->addColumn('action',
                 array(

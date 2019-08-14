@@ -68,4 +68,14 @@ class Holbi_Qixol_Model_Banner extends Mage_Core_Model_Abstract {
     public function setSaveBannerImages($banner_images) {
         Mage::getResourceModel('qixol/banner')->setBannerImages($this->getbannerId(),$banner_images);        
     }    
+
+   public function getBannerImageCollection()
+   {
+        return Mage::getResourceModel('qixol/bannerimage_collection');
+   }
+   
+   public function getBannerImageIds()
+   {
+       return $this->getResource()->getBannerImageIds($this);
+   }
 }

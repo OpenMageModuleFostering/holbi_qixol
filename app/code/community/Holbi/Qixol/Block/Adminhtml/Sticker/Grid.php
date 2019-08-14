@@ -33,32 +33,19 @@ class Holbi_Qixol_Block_Adminhtml_Sticker_Grid extends Holbi_Qixol_Block_Adminht
             'width' => '150px',
         ));
 
-        $this->addColumn('banner_link_name', array(
-            'header' => Mage::helper('qixol')->__('Link Name'),
+        $this->addColumn('promo_reference', array(
+            'header' => Mage::helper('qixol')->__('Promotion reference'),
             'width' => '250px',
-            'index' => 'banner_link_name',
-        ));        
+            'index' => 'promo_reference',
+        ));    
 
-        $this->addColumn('use_default_banner_group', array(
-            'header' => Mage::helper('qixol')->__('Use Dafault Banner Promotion?'),
-            'align' => 'left',
-            'width' => '80px',
-            'index' => 'use_default_banner_group',
-            'type' => 'options',
-            'options' => array(
-                0 => Mage::helper('qixol')->__('No'),
-                1 => Mage::helper('qixol')->__('Yes'),
-            ),
-        ));
-
-
-        $this->addColumn('default_banner_group', array(
-            'header' => Mage::helper('qixol')->__('Default Banner Promotion name'),
+        $this->addColumn('promo_type_name', array(
+            'header' => Mage::helper('qixol')->__('Promotion type name'),
             'width' => '100px',
-            'index' => 'default_banner_group',
+            'index' => 'promo_type_name',
             'type' => 'options',
             'options' => array(
-                '' => Mage::helper('qixol')->__('Not defined'),
+                '' => Mage::helper('qixol')->__(''),
                 'BOGOF' => Mage::helper('qixol')->__('Buy one get one free'),
                 'BOGOR' => Mage::helper('qixol')->__('Buy one get one reduced'),
                 'BUNDLE' => Mage::helper('qixol')->__('Bundle'),
@@ -76,32 +63,17 @@ class Holbi_Qixol_Block_Adminhtml_Sticker_Grid extends Holbi_Qixol_Block_Adminht
             ),
         ));
 
-        $this->addColumn('unique_banner_group', array(
-            'header' => Mage::helper('qixol')->__('Unique Banner Promotion refference'),
-            'width' => '250px',
-            'index' => 'unique_banner_group',
-        ));    
-
-        $this->addColumn('status', array(
-            'header' => Mage::helper('qixol')->__('Status'),
-            'align' => 'left',
-            'width' => '80px',
-            'index' => 'status',
+        $this->addColumn('is_default_for_type', array(
+            'header' => Mage::helper('qixol')->__('Default for promotion type'),
+            'width' => '100px',
+            'index' => 'is_default_for_type',
             'type' => 'options',
             'options' => array(
-                0 => 'Disabled',
-                1 => 'Enabled',
+                0 => Mage::helper('qixol')->__('No'),
+                1 => Mage::helper('qixol')->__('Yes'),
             ),
         ));
-
-        $this->addColumn('sort_order', array(
-            'header' => Mage::helper('qixol')->__('Sort Order'),
-            'width' => '80px',
-            'index' => 'sort_order',
-            'align' => 'center',
-        ));
-
-
+        
         $this->addColumn('action',
                 array(
                     'header' => Mage::helper('qixol')->__('Action'),

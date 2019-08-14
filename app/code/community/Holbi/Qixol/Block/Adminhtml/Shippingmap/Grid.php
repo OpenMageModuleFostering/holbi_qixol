@@ -4,7 +4,7 @@ class Holbi_Qixol_Block_Adminhtml_Shippingmap_Grid extends Mage_Adminhtml_Block_
     public function __construct() {
         parent::__construct();
         $this->setId('shippingmapGrid');
-        $this->setDefaultSort('shipping_name_map');
+        $this->setDefaultSort('integration_code');
         $this->setDefaultDir('ASC');
         $this->setSaveParametersInSession(true);
     }
@@ -25,13 +25,10 @@ class Holbi_Qixol_Block_Adminhtml_Shippingmap_Grid extends Mage_Adminhtml_Block_
           foreach ($list_map_names as $list_map){
               $list_map_names_exists[$list_map->getShippingName()]=$list_map->getShippingName();
           }
-          //returns only active list
-          $only_active=Mage::getStoreConfig('qixol/shippings/onlyactive');
-          /*if ($only_active>0)
-             $methods = Mage::getSingleton('shipping/config')->getActiveCarriers();
-          else */
-          $methods = Mage::getSingleton('shipping/config')->getAllCarriers();
 
+          //$methods = Mage::getSingleton('shipping/config')->getActiveCarriers();
+          $methods = Mage::getSingleton('shipping/config')->getAllCarriers();
+          
           //$options = array();
 
           foreach($methods as $_ccode => $_carrier)
@@ -68,21 +65,34 @@ class Holbi_Qixol_Block_Adminhtml_Shippingmap_Grid extends Mage_Adminhtml_Block_
 
         
         $this->addColumn('shipping_name', array(
-            'header'        => $hlp->__('Shipping Name Magento:'),
+            'header'        => $hlp->__('Shipping Method'),
             'type'          => 'shipping',
             'align'         => 'left',
             'width' => '250px',
             'index'         => 'shipping_name',
             'type' => 'options',
-            'options' => $shipping_name_array_list
+            'options' => $shipping_name_array_list,
+            'column_css_class'  => 'no-display',
+            'header_css_class'  => 'no-display'
+
         ));
 
+        $this->addColumn('carrier_title', array(
+            'header'        => $hlp->__('Carrier'),
+            'align'         => 'left',
+            'index'         => 'carrier_title'
+        ));
 
+        $this->addColumn('carrier_method', array(
+            'header'        => $hlp->__('Method'),
+            'align'         => 'left',
+            'index'         => 'carrier_method'
+        ));
 
-        $this->addColumn('shipping_name_map', array(
-            'header' => $hlp->__('Shipping Name To'),
+        $this->addColumn('integration_code', array(
+            'header' => $hlp->__('Integration Code'),
             'width' => '350px',
-            'index' => 'shipping_name_map'
+            'index' => 'integration_code'
         ));
 
         $this->addColumn('action',

@@ -4,7 +4,7 @@ class Holbi_Qixol_Adminhtml_StoresmapController extends Mage_Adminhtml_Controlle
     protected function _initAction() {
         $this->loadLayout()
                 ->_setActiveMenu('qixol/storesmap')
-                ->_addBreadcrumb(Mage::helper('qixol')->__('Manage Stores Map'), Mage::helper('qixol')->__('Manage Stores Map'));
+                ->_addBreadcrumb(Mage::helper('qixol')->__('Store Integration Codes'), Mage::helper('qixol')->__('Store Integration Codes'));
 
         return $this;
     }

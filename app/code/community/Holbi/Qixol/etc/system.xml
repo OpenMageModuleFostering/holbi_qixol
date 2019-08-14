@@ -2,13 +2,13 @@
 <config>
     <tabs>
         <qixol translate="label" module="qixol">
-            <label>Qixol Extension</label>
+            <label>Qixol Promo</label>
             <sort_order>333</sort_order>
         </qixol>
     </tabs>
     <sections>
          <qixol translate="label">
-            <label>Qixol Setting</label>
+            <label>Promo Setting</label>
             <tab>qixol</tab>
             <sort_order>100</sort_order>
             <show_in_default>1</show_in_default>
@@ -16,7 +16,7 @@
             <show_in_store>1</show_in_store>
             <groups>
               <integraion translate="label">
-                    <label>General / Intagration</label>
+                    <label>General / Integration</label>
                     <sort_order>50</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -52,8 +52,71 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </services>                        
+                        <serviceProtocol translate="label comment">
+                            <label>Service Protocol</label>
+                            <comment>Service Protocol</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>qixol/System_Config_Source_IServiceProtocols_Values</source_model>
+                            <sort_order>31</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </serviceProtocol>
+                        <restServiceAddress translate="label comment">
+                            <label>REST Service Address</label>
+                            <comment>REST Service Address</comment>
+                            <depends>
+                                <services>custom</services>
+                                <serviceProtocol>REST</serviceProtocol>
+                            </depends>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>301</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </restServiceAddress>
+                        <importManagerServiceAddress translate="label comment">
+                            <label>Import Manager Service Address</label>
+                            <comment>Import Manager Service Address</comment>
+                            <depends>
+                                <services>custom</services>
+                                <serviceProtocol>SOAP</serviceProtocol>
+                            </depends>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>302</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </importManagerServiceAddress>
+                        <exportManagerServiceAddress translate="label comment">
+                            <label>Export Manager Service Address</label>
+                            <comment>Export Manager Service Address</comment>
+                            <depends>
+                                <services>custom</services>
+                                <serviceProtocol>SOAP</serviceProtocol>
+                            </depends>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>303</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </exportManagerServiceAddress>
+                        <basketManagerServiceAddress translate="label comment">
+                            <label>Basket Manager Service Address</label>
+                            <comment>Basket Manager Service Address</comment>
+                            <depends>
+                                <services>custom</services>
+                                <serviceProtocol>SOAP</serviceProtocol>
+                            </depends>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>304</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </basketManagerServiceAddress>
                       </fields>                      
                   </integraion>   
+                    <!--
                   <frontend translate="label">
                     <label>Front-End Settings</label>
                     <sort_order>60</sort_order>
@@ -61,46 +124,6 @@
                     <show_in_website>0</show_in_website>
                     <show_in_store>0</show_in_store>
                     <fields>
-                        <showpromocat translate="label">
-                            <label>Show promotion sticker in cataloge</label>
-                            <comment>Show promotion stickers on products on cataloge</comment>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </showpromocat>
-                        <showpromoprod translate="label">
-                            <label>Show promotion sticker on product</label>
-                            <comment>Show promotion stickers on the product page</comment>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </showpromoprod>
-                        <showpromoboxes translate="label">
-                            <label>Show promotion boxes</label>
-                            <comment>Show promotion boxes on product page</comment>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </showpromoboxes>                        
-                        <showcartpromobox translate="label">
-                            <label>Show promotion box in cart</label>
-                            <comment>Show cart related only promotion box</comment>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
-                            <sort_order>15</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </showcartpromobox>                       
                         <onepagejavascr translate="label">
                             <label>Use Javascript onepage update.</label>
                             <comment>One one page chackout use javascript cart update.</comment>
@@ -131,18 +154,9 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </mcartjavascr>      
-                        <showallpromoprod translate="label">
-                            <label>Show available promotions on product page</label>
-                            <comment>Show product related promotions on product page</comment>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </showallpromoprod>                        
                       </fields>                      
                   </frontend>  
+                  -->
               <advanced translate="label">
                     <label>Advanced</label>
                     <sort_order>60</sort_order>
@@ -151,7 +165,7 @@
                     <show_in_store>0</show_in_store>
                     <fields>
                         <basketval translate="label">
-                            <label>Basket Validation</label>
+                            <label>Multi-currency Basket Validation</label>
                             <comment>When submitting baskets used selected currency</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>                            
@@ -174,7 +188,7 @@
                   </advanced>                 
                 
                   <syhchronized translate="label">
-                    <label>Synchronized Items</label>
+                    <label>Synchronised Items</label>
                     <sort_order>61</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -191,7 +205,10 @@
                             <show_in_store>0</show_in_store>
                         </synchproducts> 
                         <synchcatproducts translate="label">
-                            <label>Send real Category as categorycode</label>
+                            <label>Synchronise category with product</label>
+                            <depends>
+                                <synchproducts>1</synchproducts>
+                            </depends>
                             <comment>Send product categories in  attribute categorycode</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>                            
@@ -229,7 +246,7 @@
                             <show_in_store>0</show_in_store>
                         </synchship>    
                         <synchcurrency translate="label">
-                            <label>Synchronise Curency Sore List</label>
+                            <label>Synchronise Currency List</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>                            
                             <sort_order>5</sort_order>
@@ -246,6 +263,7 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </synchstores>
+<!--
                         <channel translate="label">
                             <label>Channel</label>
                             <frontend_type>text</frontend_type>
@@ -263,6 +281,7 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </storegroup> 
+-->
                         <synchonsaving translate="label">
                             <label>Synchronise on Saving</label>
                             <frontend_type>select</frontend_type>
@@ -274,7 +293,7 @@
                         </synchonsaving>                        
                     </fields>                      
                  </syhchronized>
-                 
+                 <!--
                   <customers translate="label">
                     <label>Customers</label>
                     <sort_order>77</sort_order>
@@ -284,7 +303,7 @@
                     <comment><![CDATA[Synchronization Config]]></comment>
                     <fields>
                         <list translate="label">
-                            <label>Synch only this types:</label>
+                            <label>Only synchronise these types</label>
                             <frontend_type>Multiselect</frontend_type>
                             <source_model>qixol/system_config_source_customers_list</source_model>
                             <sort_order>14</sort_order>
@@ -294,9 +313,9 @@
                         </list>                       
                     </fields>                      
                  </customers>
-
+                
                   <shippings translate="label">
-                    <label>Shippings</label>
+                    <label>Shipping Methods</label>
                     <sort_order>77</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -313,7 +332,7 @@
                             <show_in_store>0</show_in_store>
                         </onlyactive>                       
                         <list translate="label">
-                            <label>Synch only this types:</label>
+                            <label>Only synchronise these methods</label>
                             <frontend_type>Multiselect</frontend_type>
                             <source_model>qixol/system_config_source_shippings_list</source_model>
                             <sort_order>14</sort_order>
@@ -323,9 +342,10 @@
                         </list>                       
                     </fields>                      
                  </shippings>
+                 -->
                  
                   <productattrib translate="label">
-                    <label>Products Attributes</label>
+                    <label>Product Attributes</label>
                     <sort_order>72</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -333,7 +353,7 @@
                     <comment><![CDATA[Synchronization Config]]></comment>
                     <fields>
                         <attributes translate="label">
-                            <label>Include when synch product:</label>
+                            <label>Include with synchronised products:</label>
                             <frontend_type>checkboxes</frontend_type>
                             <source_model>qixol/system_config_source_attributes</source_model>
                             <frontend_model>qixol/adminhtml_system_config_attributes</frontend_model>
@@ -344,6 +364,8 @@
                         </attributes>                       
                     </fields>                      
                  </productattrib>
+                 
+                 <!--
                   <issuedpoints translate="label">
                     <label>Issued Points</label>
                     <sort_order>72</sort_order>
@@ -362,11 +384,12 @@
                             <show_in_store>0</show_in_store>
                         </convertrate>                       
                     </fields>                      
-                 </issuedpoints>                 
+                 </issuedpoints>
+                 -->
                 <sinch_explort_products translate="label">
-                    <label>Run export products</label>
+                    <label>Synchronise items to Promo</label>
                     <frontend_type>text</frontend_type>
-                    <comment>Export products to qixol.</comment>
+                    <comment>Export items to Promo</comment>
                     <sort_order>150</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
@@ -403,5 +426,57 @@
                </sinch_import_promotion>                  
             </groups>
         </qixol>
+    </sections>
+    <sections>
+        <stickers translate="label">
+            <label>Stickers</label>
+            <tab>qixol</tab>
+            <sort_order>110</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General</label>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment><![CDATA[Stickers configuration]]></comment>
+                    <fields>
+                        <showStickersOnCataloguePage translate="label">
+                            <label>Show promotion stickers on catalogue page</label>
+                            <frontend_type>select</frontend_type>
+                            <config_path>qixol/stickers/showStickersOnCataloguePage</config_path>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </showStickersOnCataloguePage>
+                        <showStickersOnProductPage translate="label">
+                            <label>Show promotion stickers on product page</label>
+                            <frontend_type>select</frontend_type>
+                            <config_path>qixol/stickers/showStickersOnProductPage</config_path>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </showStickersOnProductPage>      
+                        <showPromoBoxOnProductPage translate="label">
+                            <label>Show available promotions on product page</label>
+                            <frontend_type>select</frontend_type>
+                            <config_path>qixol/stickers/showPromoBoxOnProductPage</config_path>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </showPromoBoxOnProductPage>      
+                    </fields>                      
+                </general>   
+            </groups>
+        </stickers>
     </sections>
 </config>

@@ -8,83 +8,16 @@ class Holbi_Qixol_Block_Adminhtml_Sticker_Edit_Tab_Form extends Mage_Adminhtml_B
         $version = substr(Mage::getVersion(), 0, 3);
         //$config = (($version == '1.4' || $version == '1.5') ? "'config' => Mage::getSingleton('sticker/wysiwyg_config')->getConfig()" : "'class'=>''");
 
-
-        $fieldset->addField('banner_link_name', 'multiselect', array(
-            'label' => Mage::helper('qixol')->__('Sticker show on:'),
-            'class' => 'required-entry',
-            'required' => true,
-            'name' => 'banner_link_name',
-            'values' => Mage::getModel('qixol/bannerboxes')->getStickerOptionArray(),
-            'after_element_html' => Mage::helper('qixol')->__(' '),
-        ));
-
         $fieldset->addField('filename', 'image', array(
             'label' => Mage::helper('qixol')->__('Upload and use Image'),
-            'required' => false,
+            'required' => true,
             'name' => 'filename',
         ));
 
-        /*$fieldset->addField('use_default_sticker', 'select', array(
-            'label' => Mage::helper('qixol')->__('Or Default sticker for'),
+        $fieldset->addField('is_default_for_type', 'select', array(
+            'label' => Mage::helper('qixol')->__('Default for Promotion Type?'),
             'class' => 'required-entry',
-            'required' => false,
-            'name' => 'use_default_sticker',
-            'values' => array(
-                array(
-                    'value' => '',
-                    'label' => Mage::helper('qixol')->__('Not defined'),
-                ),
-                array(
-                    'value' => 'BOGOF',
-                    'label' => Mage::helper('qixol')->__('Buy one get one free'),
-                ),
-                array(
-                    'value' => 'BOGOR',
-                    'label' => Mage::helper('qixol')->__('Buy one get one reduced'),
-                ),
-                array(
-                    'value' => 'BUNDLE',
-                    'label' => Mage::helper('qixol')->__('Bundle'),
-                ),
-                array(
-                    'value' => 'DEAL',
-                    'label' => Mage::helper('qixol')->__('Deal'),
-                ),
-                array(
-                    'value' => 'FREEPRODUCT',
-                    'label' => Mage::helper('qixol')->__('Free product'),
-                ),
-                array(
-                    'value' => 'ISSUECOUPON',
-                    'label' => Mage::helper('qixol')->__('Issue coupon'),
-                ),
-                array(
-                    'value' => 'ISSUEPOINTS',
-                    'label' => Mage::helper('qixol')->__('Issue points'),
-                ),
-                array(
-                    'value' => 'BASKETREDUCTION',
-                    'label' => Mage::helper('qixol')->__('Backet reduction'),
-                ),
-                array(
-                    'value' => 'DELIVERYREDUCTION',
-                    'label' => Mage::helper('qixol')->__('Delivery reduction'),
-                ),
-                array(
-                    'value' => 'MULTIPLEPROMO',
-                    'label' => Mage::helper('qixol')->__('Multiple promos'),
-                ),
-                array(
-                    'value' => 'PRODUCTSREDUCTION',
-                    'label' => Mage::helper('qixol')->__('Product reduction'),
-                ),
-            ),
-        ));*/
-
-        $fieldset->addField('use_default_banner_group', 'select', array(
-            'label' => Mage::helper('qixol')->__('For Default Promotion Type?'),
-            'class' => 'required-entry',
-            'name' => 'use_default_banner_group',
+            'name' => 'is_default_for_type',
             'values' => array(
                 array(
                     'value' => 1,
@@ -97,11 +30,11 @@ class Holbi_Qixol_Block_Adminhtml_Sticker_Edit_Tab_Form extends Mage_Adminhtml_B
             ),
         ));
 
-        $fieldset->addField('default_banner_group', 'select', array(
-            'label' => Mage::helper('qixol')->__('Default promotion type'),
+        $fieldset->addField('promo_type_name', 'select', array(
+            'label' => Mage::helper('qixol')->__('Promotion Type'),
             'class' => 'required-entry',
             'required' => false,
-            'name' => 'default_banner_group',
+            'name' => 'promo_type_name',
             'values' => array(
                 array(
                     'value' => '',
@@ -154,82 +87,33 @@ class Holbi_Qixol_Block_Adminhtml_Sticker_Edit_Tab_Form extends Mage_Adminhtml_B
             ),
         ));
 
-        $fieldset->addField('unique_banner_group', 'text', array(
-            'label' => Mage::helper('qixol')->__('Unique Promotion reference'),
-            'name' => 'unique_banner_group',
+        $field_last = $fieldset->addField('promo_reference', 'text', array(
+            'label' => Mage::helper('qixol')->__('Promotion reference'),
+            'name' => 'promo_reference',
         ));
 
-        /*if ($version == '1.4' || $version == '1.5') {
-            $fieldset->addField('banner_content', 'editor', array(
-                'name' => 'banner_content',
-                'label' => Mage::helper('qixol')->__('Content'),
-                'title' => Mage::helper('qixol')->__('Content'),
-                'style' => 'width:600px; height:250px;',
-                'config' => Mage::getSingleton('banner/wysiwyg_config')->getConfig(),
-                'wysiwyg' => true,
-                'required' => false,
-            ));
-        } else {
-            $fieldset->addField('banner_content', 'editor', array(
-                'name' => 'banner_content',
-                'label' => Mage::helper('cms')->__('Content'),
-                'title' => Mage::helper('cms')->__('Content'),
-                'style' => 'width:600px; height:250px;',                
-                'wysiwyg' => false,
-                'required' => false,
-            ));
-        }*/
-
-        $fieldset->addField('sort_order', 'text', array(
-            'label' => Mage::helper('qixol')->__('Sort Order'),
-            'name' => 'sort_order',
-        ));
-
-
-        $field_last=$fieldset->addField('status', 'select', array(
-            'label' => Mage::helper('qixol')->__('Status'),
-            'class' => 'required-entry',
-            'name' => 'status',
-            'values' => array(
-                array(
-                    'value' => 1,
-                    'label' => Mage::helper('qixol')->__('Enabled'),
-                ),
-                array(
-                    'value' => 0,
-                    'label' => Mage::helper('qixol')->__('Disabled'),
-                ),
-            ),
-        ));
-
-         $field_last->setAfterElementHtml('<script>
+        $field_last->setAfterElementHtml('<script>
           //< ![C
-          function on_change_default_banner_group(){
-                if ($(\'use_default_banner_group\')[$(\'use_default_banner_group\').selectedIndex].value==\'1\'){
-                    $(\'unique_banner_group\').setValue("");
-                    $(\'unique_banner_group\').disable();
-                    $(\'default_banner_group\').enable();
+          function on_change_is_default_for_type(){
+                if ($(\'is_default_for_type\')[$(\'is_default_for_type\').selectedIndex].value==\'1\'){
+                    $(\'promo_reference\').setValue("");
+                    $(\'promo_reference\').disable();
+                    $(\'promo_type_name\').enable();
                 }else {
-                    $(\'unique_banner_group\').enable();
-                    $(\'default_banner_group\').selectedIndex=0;
-                    $(\'default_banner_group\').disable();
+                    $(\'promo_reference\').enable();
+                    $(\'promo_type_name\').selectedIndex=0;
+                    $(\'promo_type_name\').disable();
                 }
 
           }
-          if ($(\'use_default_banner_group\')[$(\'use_default_banner_group\').selectedIndex].value==\'1\'){
-              $(\'unique_banner_group\').disable();
-          }else {
-              $(\'default_banner_group\').selectedIndex=0;
-              $(\'default_banner_group\').disable();
-          }
-
  
-            document.observe("dom:loaded", function() {
+        document.observe("dom:loaded", function() {
 
-                $("use_default_banner_group").observe("change",function(e){
-                       on_change_default_banner_group();
-                });
+            $("is_default_for_type").observe("change",function(e){
+                   on_change_is_default_for_type();
             });
+            on_change_is_default_for_type();
+        });
 
 
           //]]>

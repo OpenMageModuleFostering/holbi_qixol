@@ -4,7 +4,7 @@ class Holbi_Qixol_Adminhtml_ShippingmapController extends Mage_Adminhtml_Control
     protected function _initAction() {
         $this->loadLayout()
                 ->_setActiveMenu('qixol/shippingmap')
-                ->_addBreadcrumb(Mage::helper('qixol')->__('Manage Shippings Map'), Mage::helper('qixol')->__('Manage Shippings Map'));
+                ->_addBreadcrumb(Mage::helper('qixol')->__('Shipping Method Integration Codes'), Mage::helper('qixol')->__('Shipping Method Integration Codes'));
 
         return $this;
     }

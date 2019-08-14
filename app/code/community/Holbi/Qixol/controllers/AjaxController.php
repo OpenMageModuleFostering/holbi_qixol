@@ -13,25 +13,41 @@ class Holbi_Qixol_AjaxController extends Mage_Adminhtml_Controller_Action
         if ($tmp_data['id']>0){
           $message_output.='<strong>'.$_hlp->__('Customers').'</strong>:'.$_hlp->__($tmp_data['extended_message']!=''?$tmp_data['extended_message']:$tmp_data['last_message'])."<br><br><hr>";
           $finished=$tmp_data['finished'];
-        } else $finished=0;
+        } else {
+          $message_output.='<strong>'.$_hlp->__('Customers').'</strong>:Not started<br><br><hr>';
+        }
 
         $tmp_data=$export->getExportStatus('delivery');
         if ($tmp_data['id']>0){
           $message_output.='<strong>'.$_hlp->__('Shippings').'</strong>:'.$_hlp->__($tmp_data['extended_message']!=''?$tmp_data['extended_message']:$tmp_data['last_message'])."<br><br><hr>";
           $finished=$tmp_data['finished'];
-        } else $finished=0;
+        } else {
+          $message_output.='<strong>'.$_hlp->__('Shippings').'</strong>:Not started<br><br><hr>';
+        }
 
         $tmp_data=$export->getExportStatus('products');
         if ($tmp_data['id']>0){
           $message_output.='<strong>'.$_hlp->__('Products').'</strong>:'.$_hlp->__($tmp_data['extended_message']!=''?$tmp_data['extended_message']:$tmp_data['last_message'])."<br><br><hr>";
           $finished=$tmp_data['finished'];
-        } else $finished=0;
+        } else {
+          $message_output.='<strong>'.$_hlp->__('Products').'</strong>:Not started<br><br><hr>';
+        }
 
         $tmp_data=$export->getExportStatus('currency');
         if ($tmp_data['id']>0){
           $message_output.='<strong>'.$_hlp->__('Currency').'</strong>:'.$_hlp->__($tmp_data['extended_message']!=''?$tmp_data['extended_message']:$tmp_data['last_message'])."<br><br><hr>";
           $finished=$tmp_data['finished'];
-        } else $finished=0;
+        } else {
+          $message_output.='<strong>'.$_hlp->__('Currency').'</strong>:Not started<br><br><hr>';
+        }
+
+        $tmp_data=$export->getExportStatus('store');
+        if ($tmp_data['id']>0){
+          $message_output.='<strong>'.$_hlp->__('Stores').'</strong>:'.$_hlp->__($tmp_data['extended_message']!=''?$tmp_data['extended_message']:$tmp_data['last_message'])."<br><br><hr>";
+          $finished=$tmp_data['finished'];
+        } else {
+          $message_output.='<strong>'.$_hlp->__('Stores').'</strong>:Not started<br><br><hr>';
+        }
 
         if ($message_output!='') {
             // JSON
@@ -46,6 +62,7 @@ class Holbi_Qixol_AjaxController extends Mage_Adminhtml_Controller_Action
 
 
     public function UpdateImportStatusAction() {
+
         $_hlp=Mage::helper('qixol');
 
         $import=Mage::getModel('qixol/sinch');

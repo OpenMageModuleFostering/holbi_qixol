@@ -66,12 +66,12 @@ class Holbi_Qixol_Block_Adminhtml_Bannerboxes_Edit_Tab_Form extends Mage_Adminht
             'name' => 'banner_box_is_active',
             'values' => array(
                 array(
-                    'value' => 1,
-                    'label' => Mage::helper('qixol')->__('Enabled'),
+                    'value' => 0,
+                    'label' => Mage::helper('qixol')->__('Disabled'),
                 ),
                 array(
-                    'value' => 2,
-                    'label' => Mage::helper('qixol')->__('Disabled'),
+                    'value' => 1,
+                    'label' => Mage::helper('qixol')->__('Enabled'),
                 ),
             ),
         ));

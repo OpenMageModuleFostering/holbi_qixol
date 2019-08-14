@@ -56,52 +56,10 @@ class Holbi_Qixol_Adminhtml_BannerController extends Mage_Adminhtml_Controller_a
     }
 
     public function saveAction() {
-        $imagedata = array();
-        if (!empty($_FILES['filename']['name'])) {
-            try {
-                $ext = substr($_FILES['filename']['name'], strrpos($_FILES['filename']['name'], '.') + 1);
-                $fname = 'File-' . time() . '.' . $ext;
-                $uploader = new Varien_File_Uploader('filename');
-                $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png')); // or pdf or anything
-
-                $uploader->setAllowRenameFiles(true);
-                $uploader->setFilesDispersion(false);
-
-                $path = Mage::getBaseDir('media').DS.'custom'.DS.'banners';
-
-                $uploader->save($path, $fname);
-
-                $imagedata['filename'] = 'custom/banners/'.$fname;
-            } catch (Exception $e) {
-                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-                $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
-                return;
-            }
-        }
         if ($data = $this->getRequest()->getPost()) {
-            $image_saved=false;
-            if (is_array($data['banner_link_name'])){
-              $data['banner_link_name']=join(",",$data['banner_link_name']);
+            if (is_array($data['display_zone'])){
+              $data['display_zone']=join(",",$data['display_zone']);
              }
-
-            if (!empty($imagedata['filename'])) {
-                $modelimages = Mage::getModel('qixol/Bannerimages');
-                $imagesdata['filename']=$imagedata['filename'];
-                $modelimages->setData($imagesdata);
-                $modelimages->save();
-                $image_saved=true;
-                unset($imagedata['filename']);
-            } else {
-                /*if (isset($data['filename']['delete']) && $data['filename']['delete'] == 1) {
-                    if ($data['filename']['value'] != '') {
-                        $_helper = Mage::helper('qixol');
-                        $this->removeFile(Mage::getBaseDir('media').DS.$_helper->updateDirSepereator($data['filename']['value']));
-                    }
-                    $data['filename'] = '';
-                } else {
-                    unset($data['filename']);
-                }*/
-            }
 
             $model = Mage::getModel('qixol/banner');
             $model->setData($data)
@@ -116,7 +74,6 @@ class Holbi_Qixol_Adminhtml_BannerController extends Mage_Adminhtml_Controller_a
                 }
 
                 $model->save();
-
 
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('qixol')->__('Item was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
@@ -221,20 +178,73 @@ class Holbi_Qixol_Adminhtml_BannerController extends Mage_Adminhtml_Controller_a
         $this->_sendUploadResponse($fileName, $content);
     }
 
-    protected function _sendUploadResponse($fileName, $content, $contentType='application/octet-stream') {
-        $response = $this->getResponse();
-        $response->setHeader('HTTP/1.1 200 OK', '');
-        $response->setHeader('Pragma', 'public', true);
-        $response->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true);
-        $response->setHeader('Content-Disposition', 'attachment; filename=' . $fileName);
-        $response->setHeader('Last-Modified', date('r'));
-        $response->setHeader('Accept-Ranges', 'bytes');
-        $response->setHeader('Content-Length', strlen($content));
-        $response->setHeader('Content-type', $contentType);
-        $response->setBody($content);
-        $response->sendResponse();
-        die;
+    public function uploadAction()
+    {
+        try {
+            $uploader = new Mage_Core_Model_File_Uploader('image');
+            $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
+            $uploader->addValidateCallback('catalog_product_image',
+                Mage::helper('catalog/image'), 'validateUploadFile');
+            $uploader->setAllowRenameFiles(true);
+            $uploader->setFilesDispersion(true);
+            
+            // TODO: 'custom' and 'banners' to be read from config
+            // TODO: better folder / file naming convention
+//            $ext = substr($_FILES['filename']['name'], strrpos($_FILES['filename']['name'], '.') + 1);
+//            $fname = 'File-' . time() . '.' . $ext;
+//            $path = Mage::getBaseDir('media') . DS . 'custom' . DS . 'banners';
+            $result = $uploader->save(
+                Mage::getSingleton('catalog/product_media_config')->getBaseTmpMediaPath()
+            );
+
+//            Mage::dispatchEvent('catalog_product_gallery_upload_image_after', array(
+//                'result' => $result,
+//                'action' => $this
+//            ));
+
+            /**
+             * Workaround for prototype 1.7 methods "isJSON", "evalJSON" on Windows OS
+             */
+            $result['tmp_name'] = str_replace(DS, "/", $result['tmp_name']);
+            $result['path'] = str_replace(DS, "/", $result['path']);
+
+            $result['url'] = Mage::getSingleton('catalog/product_media_config')->getTmpMediaUrl($result['file']);
+            $result['file'] = $result['file'] . '.tmp';
+            $result['cookie'] = array(
+                'name'     => session_name(),
+                'value'    => $this->_getSession()->getSessionId(),
+                'lifetime' => $this->_getSession()->getCookieLifetime(),
+                'path'     => $this->_getSession()->getCookiePath(),
+                'domain'   => $this->_getSession()->getCookieDomain()
+            );
+
+        } catch (Exception $e) {
+            $result = array(
+                'error' => $e->getMessage(),
+                'errorcode' => $e->getCode());
+        }
+
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
+    
+//    public function addBannerImageAction() {
+//        $this->_forward('edit/bannerimage_edit');
+//    }
+//    
+//    protected function _sendUploadResponse($fileName, $content, $contentType='application/octet-stream') {
+//        $response = $this->getResponse();
+//        $response->setHeader('HTTP/1.1 200 OK', '');
+//        $response->setHeader('Pragma', 'public', true);
+//        $response->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true);
+//        $response->setHeader('Content-Disposition', 'attachment; filename=' . $fileName);
+//        $response->setHeader('Last-Modified', date('r'));
+//        $response->setHeader('Accept-Ranges', 'bytes');
+//        $response->setHeader('Content-Length', strlen($content));
+//        $response->setHeader('Content-type', $contentType);
+//        $response->setBody($content);
+//        $response->sendResponse();
+//        die;
+//    }
 
     protected function removeFile($file) {
         try {

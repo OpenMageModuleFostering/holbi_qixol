@@ -3,11 +3,11 @@
     "type": "magento-module",
     "license": "GNU-General-Public-License-(GPL)",
     "homepage": "",
-    "description": "Qixol Promo",
+    "description": "Qixol Promo extension",
     "authors": [
     {
-        "name": "Sergey",
-        "email": "sbukovetsky@holbi.co.uk"
+        "name": "Qixol",
+        "email": "ken.westgate@qixol.com"
     }
 ],
     "suggest": {

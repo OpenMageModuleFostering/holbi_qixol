@@ -40,8 +40,8 @@ class Holbi_Qixol_Block_Adminhtml_Bannerboxes_Grid extends Mage_Adminhtml_Block_
             'index' => 'banner_box_is_active',
             'type' => 'options',
             'options' => array(
+                0 => 'Disabled',
                 1 => 'Enabled',
-                2 => 'Disabled',
             ),
         ));
 

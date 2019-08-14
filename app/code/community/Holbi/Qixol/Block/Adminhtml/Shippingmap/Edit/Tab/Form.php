@@ -20,62 +20,95 @@ class Holbi_Qixol_Block_Adminhtml_Shippingmap_Edit_Tab_Form extends Mage_Adminht
           foreach ($list_map_names as $list_map){
               $list_map_names_exists[$list_map->getShippingName()]=$list_map->getShippingName();
           }
-          //returns only active list
-          $only_active=Mage::getStoreConfig('qixol/shippings/onlyactive');
-          /*if ($only_active>0)
-             $methods = Mage::getSingleton('shipping/config')->getActiveCarriers();
-          else */
-          $methods = Mage::getSingleton('shipping/config')->getAllCarriers();
+          
+          //$carriers = Mage::getSingleton('shipping/config')->getActiveCarriers();
+          $carriers = Mage::getSingleton('shipping/config')->getAllCarriers();
 
-          //$options = array();
-
-          foreach($methods as $_ccode => $_carrier)
+          $shippingMethodDropDownValues = array();
+          
+          foreach($carriers as $_ccode => $_carrier)
           {
-              $_methodOptions = array();
+              $carrierMethods = array();
+              
+                if(!$_title = Mage::getStoreConfig("carriers/$_ccode/title"))
+                {
+                        $_title = $_ccode;
+                }
+
            try{ //some methods not allowed getAllowedMethods
               if($_methods = $_carrier->getAllowedMethods())
               {
                   foreach($_methods as $_mcode => $_method)
                   {
                       $_code = $_ccode . '_' . $_mcode;
-                      $shipping_name_array_list[] = array('value'=>$_code ,'label'=>$hlp->__(trim($_method)==''?$_code:$_method));
-                      if (isset($list_map_names_exists[$_code])) unset($_code);
+                      $shippingMethod = $hlp->__(trim($_method) == '' ? $_code : $_method);
+                      $carrierMethods[] = array(
+                          'value' => $_code . '::' . $_title . '::' . $shippingMethod,
+                          'label' => $shippingMethod
+                        );
+                      if (isset($list_map_names_exists[$_code]))
+                      {
+                          unset($_code);
+                      }
                   }
 
-                 /* if(!$_title = Mage::getStoreConfig("carriers/$_ccode/title"))
-                      $_title = $_ccode;
-
-                  $options[] = array('value' => $_methodOptions, 'label' => $hlp->__($_title));*/
+                $shippingMethodDropDownValues[] = array('label' => $_title, 'value' => $carrierMethods);
               }
             }
             catch(Exception $e) {
             continue;
             }
+              
           }
-          if (count($list_map_names_exists)){
-              foreach ($list_map_names_exists as $exists_old_code)
-                      $shipping_name_array_list[] = array('value'=>$exists_old_code,'label'=>$hlp->__($exists_old_code));
 
-           }
+//$shipping_name_array_list = array(
+//    array(
+//        'label' => 'Flatrate',
+//        'value' =>  array(array('label' => 'Fixed', 'value' => 'flatrate_flatrate'))
+//    ),
+//    array(
+//        'label' => 'Free Shipping',
+//        'value' => array(array('label' => 'Free', 'value' => 'freeshipping_freeshipping'))
+//    ),
+//    array(
+//        'label' => 'Federal Express',
+//        'value' => array(
+//                        array('label' => '2 Day', 'value' => 'fedex_FEDEX_2_DAY'),
+//                        array('label' => 'Ground', 'value' => 'fedex_FEDEX_GROUND'),
+//                        array('label' => 'First Overnight', 'value' => 'fedex_FIRST_OVERNIGHT')
+//    ))
+//);
 
-
-
-        $fieldset->addField('shipping_name', 'select', array(
-            'label' => Mage::helper('qixol')->__('Shipping Name Magento:'),
+        $fieldset->addField('shipping_method', 'select', array(
+            'label' => Mage::helper('qixol')->__('Shipping Method'),
             'class' => 'required-entry',
             'required' => true,
-            'name' => 'shipping_name',
-            'values' => $shipping_name_array_list
+            'name' => 'shipping_method',
+            'values' => $shippingMethodDropDownValues
         ));
 
-        $fieldset->addField('shipping_name_map', 'text', array(
-            'label' => Mage::helper('qixol')->__('Shipping Name'),
+        $fieldset->addField('integration_code', 'text', array(
+            'label' => Mage::helper('qixol')->__('Integration Code'),
             'class' => 'required-entry',
             'required' => true,
-            'name' => 'shipping_name_map',
-            'after_element_html' => Mage::helper('qixol')->__('Name to be send to quxion.'),
+            'name' => 'integration_code',
+            'after_element_html' => Mage::helper('qixol')->__('Code to be synchronised to Promo'),
         ));
 
+        $fieldset->addField('shipping_name', 'hidden', array(
+            'name' => 'shipping_name'
+        ));
+        
+        $fieldset->addField('carrier_title', 'hidden', array(
+            'name' => 'carrier_title'
+        ));
+
+        $lastField = $fieldset->addField('carrier_method', 'hidden', array(
+            'name' => 'carrier_method'
+        ));
+
+                
+        $lastField->setAfterElementHtml($this->prepareScript());
 
         if (Mage::getSingleton('adminhtml/session')->getShippingmapData()) {
             $form->setValues(Mage::getSingleton('adminhtml/session')->getShippingmapData());
@@ -86,4 +119,33 @@ class Holbi_Qixol_Block_Adminhtml_Shippingmap_Edit_Tab_Form extends Mage_Adminht
         return parent::_prepareForm();
     }
 
+    private function prepareScript()
+    {
+        return '<script>
+          //< ![C
+            function shipping_method_onChange(){
+                setDataFields();
+            }
+
+            function setDataFields() {
+                var shippingMethodDetails = $("shipping_method").value.split(\'::\');
+                $("shipping_name").value = shippingMethodDetails[0];
+                $("carrier_title").value = shippingMethodDetails[1];
+                $("carrier_method").value = shippingMethodDetails[2];
+            }
+            
+            document.observe("dom:loaded", function() {
+
+                $("shipping_method").observe("change",function(e){
+                       shipping_method_onChange();
+                });
+
+                setDataFields();
+
+            });
+
+
+          //]]>
+          </script>';
+    }
 }
