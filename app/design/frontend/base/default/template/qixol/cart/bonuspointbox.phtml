@@ -1,0 +1,75 @@
+<style>
+  #bonuspoints .input-text{
+  float:left;
+  border-radius: 0;
+  height: 30px;
+  margin: 4px 10px 0 0;
+  width: 100px; 
+  }
+  
+#bonuspoints .button-wrapper{
+float: left;
+}
+
+#bonuspoints label{
+float:left;
+font-family: "Raleway", "Helvetica Neue", Verdana, Arial, sans-serif;
+font-size: 12px;
+font-weight: 400;
+text-align: left;
+text-transform: uppercase;
+min-width: 90px;
+display: inline-block;
+margin-right: 10px;
+line-height:32px;
+}
+.discount h2{
+font-weight:bold;
+font-size:12px;
+}
+</style>
+<?php
+$customerId = Mage::getModel('customer/session')->getCustomerId();
+$customerPoints = Mage::getModel('qixol/Bonuspoints')->load($customerId);
+?>
+<div class="discount">
+<h2>Reward Points</h2>
+<?php $r_disc = Mage::getSingleton('customer/session')->getPointsAmount(); ?>
+<form action="<?php echo Mage::getUrl('qixol/cart/applypoints') ?>" id="bonuspoints" method="post">
+
+    <div class="discount-form">
+            <label for="coupon_code"><?php echo $this->__('Points') ?></label>
+            <input type="hidden" name="removepoints" id="remove-points" value="0" />
+            <div class="field-wrapper">
+                <input class="input-text" type="text" id="reward_points" name="reward_points" value="<?php echo $r_disc; ?>" />
+                <div class="button-wrapper">
+                    <button type="button" title="<?php echo $this->__('Apply') ?>" class="button2" onclick="rewardForm.submit(false)" value="<?php echo $this->__('Apply') ?>"><span><span><?php echo $this->__('Apply') ?></span></span></button>
+                    
+          <?php if(strlen($r_disc > 0)): ?>
+                        <button type="button" title="<?php echo $this->__('Cancel') ?>" class="button2 cancel-coupon" onclick="rewardForm.submit(true)" value="<?php echo $this->__('Cancel') ?>"><span><span><?php echo $this->__('Cancel') ?></span></span>
+                        </button>
+                    <?php endif;?>
+          
+                </div>
+            </div><br>
+      <div style="padding-top:20px;"><?php echo $this->__('Balance Available') ?> : <?= sprintf('%d',$customerPoints->getCurrentPoints()); ?> </div>
+        </div>
+</form>
+
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var rewardForm = new VarienForm('bonuspoints');
+rewardForm.submit = function (isRemove) {
+    if (isRemove) {
+        $('reward_points').removeClassName('required-entry');
+        $('remove-points').value = "1";
+    } else {
+        $('reward_points').addClassName('required-entry');
+        $('remove-points').value = "0";
+    }
+    return VarienForm.prototype.submit.bind(rewardForm)();
+}
+//]]>
+</script>

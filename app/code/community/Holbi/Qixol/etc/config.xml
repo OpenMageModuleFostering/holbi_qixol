@@ -1,0 +1,396 @@
+<?xml version="1.0"?>
+<config>
+  <default>
+    <qixol>
+        <integraion>
+            <dropdown>evaluation</dropdown>
+        </integraion>
+    </qixol>
+  </default>
+  <modules>
+    <Holbi_Qixol>
+      <version>0.1.0</version>
+    </Holbi_Qixol>
+  </modules>
+  <global>
+    <helpers>
+      <qixol>
+        <class>Holbi_Qixol_Helper</class>
+      </qixol>
+    </helpers>
+	<blocks>
+	  <qixol>
+		<class>Holbi_Qixol_Block</class>
+	  </qixol>
+	</blocks>
+    <fieldsets>
+      <sales_convert_quote_address>
+        <points_amount><to_order>*</to_order></points_amount>
+        <base_points_amount><to_order>*</to_order></base_points_amount>
+      </sales_convert_quote_address>
+      <sales_convert_order>
+        <points_amount><to_invoice>*</to_invoice></points_amount>
+        <base_points_amount><to_invoice>*</to_invoice></base_points_amount>
+     </sales_convert_order>
+   </fieldsets>  
+   <pdf>
+    <totals>
+            <points translate="title">
+                <title>Rewards points discount</title>
+                <source_field>points_amount</source_field>
+                <font_size>7</font_size>
+                <display_zero>0</display_zero>
+                <sort_order>650</sort_order>
+                <amount_prefix>-</amount_prefix>
+            </points>
+    </totals>
+  </pdf>
+    <sales>
+      <quote>
+        <totals>
+          <points>
+            <class>Holbi_Qixol_Model_Ordertotalpoints</class>
+            <after>subtotal</after>
+          </points>
+        </totals>
+      </quote>
+      <order_invoice>
+        <totals>
+          <points>
+            <class>Holbi_Qixol__Model_Invoicepoints</class>
+            <after>subtotal</after>
+          </points>
+        </totals>
+      </order_invoice>
+      <order_creditmemo>
+        <totals>
+          <points>
+             <class>Holbi_Qixol_Model_Creditmemopoints</class>
+              <after>subtotal</after>
+          </points>
+        </totals>
+      </order_creditmemo>      
+    </sales>  
+	<models>
+	  <qixol>
+		<class>Holbi_Qixol_Model</class>
+		<resourceModel>qixol_mysql4</resourceModel>
+	  </qixol>
+	  <qixol_mysql4>
+		<class>Holbi_Qixol_Model_Mysql4</class>
+		<entities>		  
+        <promotions>
+            <table>qixol_promotions_type</table>
+        </promotions>  
+        <promotionhasproduct>
+            <table>qixol_promotion_has_product</table>
+        </promotionhasproduct>          
+        <banner>
+            <table>qixol_banners</table>
+        </banner>
+        <bannerimages>
+            <table>qixol_banner_images</table>
+        </bannerimages>
+        <bannertoimage>
+            <table>qixol_banner_has_images</table>
+          </bannertoimage>
+        <sticker>
+            <table>qixol_stickers</table>
+        </sticker>
+        <bannerboxes>
+            <table>qixol_banner_box</table>
+        </bannerboxes>        
+        <exprpocessstat>
+            <table>qixol_process_export_status_table</table>
+        </exprpocessstat>        
+        <exportstat>
+            <table>qixol_product_export_stat</table>
+        </exportstat>        
+			  <deletedproduct>
+				<table>qixol_product_to_delete</table>
+			  </deletedproduct>
+        <customergrouspmap>
+        <table>qixol_customers_groups_name_map</table>
+        </customergrouspmap>
+        <shippingmap>
+        <table>qixol_shipping_name_map</table>
+        </shippingmap>          
+        <issuedcoupon>
+        <table>qixol_coupon_issued</table>
+        </issuedcoupon>      
+        <storesmap>
+        <table>qixol_stores_name_map</table>
+        </storesmap>
+        <bonuspoints>        
+            <table>qixol_cutomer_points</table>
+        </bonuspoints>
+    </entities>
+	  </qixol_mysql4>
+	</models>
+	<resources>    
+	  <qixol_setup>
+		<setup>
+		  <module>Holbi_Qixol</module>
+		</setup>
+		<connection>
+		  <use>core_setup</use>
+		</connection>
+	  </qixol_setup>
+	  <qixol_write>
+		<connection>
+		  <use>core_write</use>
+		</connection>
+	  </qixol_write>
+	  <qixol_read>
+		<connection>
+		  <use>core_read</use>
+		</connection>
+	  </qixol_read>
+	</resources>
+    <events>
+	    <catalog_product_delete_before> <!-- identifier of the event we want to catch -->
+        <observers>
+          <catalog_product_delete_before_handler> <!-- identifier of the event handler -->
+            <type>model</type> <!-- class method call type; valid are model, object and singleton -->
+            <class>qixol/observer</class> <!-- observers class alias -->
+            <method>markDletedProduct</method>  <!-- observer's method to be called -->
+            <args></args> <!-- additional arguments passed to observer -->
+          </catalog_product_delete_before_handler>
+        </observers>
+      </catalog_product_delete_before>      
+      <checkout_cart_save_after> <!-- identifier of the event we want to catch -->
+        <observers>
+          <checkout_cart_save_after_handler> <!-- identifier of the event handler -->
+            <type>model</type> <!-- class method call type; valid are model, object and singleton -->
+            <class>qixol/observer</class> <!-- observers class alias -->
+            <method>processGetCartPromo</method>  <!-- observer's method to be called -->
+            <args></args> <!-- additional arguments passed to observer -->
+          </checkout_cart_save_after_handler>
+        </observers>
+      </checkout_cart_save_after>
+      
+      <checkout_controller_onepage_save_shipping_method> <!-- identifier of the event we want to catch -->
+        <observers>
+          <checkout_controller_onepage_save_shipping_method_handler> <!-- identifier of the event handler -->
+            <type>model</type> <!-- class method call type; valid are model, object and singleton -->
+            <class>qixol/observer</class> <!-- observers class alias -->
+            <method>processShippingUpdated</method>  <!-- observer's method to be called -->
+            <args></args> <!-- additional arguments passed to observer -->
+          </checkout_controller_onepage_save_shipping_method_handler>
+        </observers>
+      </checkout_controller_onepage_save_shipping_method>      
+      
+      <sales_convert_quote_to_order> <!-- identifier of the event we want to catch -->
+        <observers>
+          <sales_convert_quote_to_order_handler> <!-- identifier of the event handler -->
+            <type>model</type> <!-- class method call type; valid are model, object and singleton -->
+            <class>qixol/observer</class> <!-- observers class alias -->
+            <method>processApplyCartPromo</method>  <!-- observer's method to be called -->
+            <args></args> <!-- additional arguments passed to observer -->
+          </sales_convert_quote_to_order_handler>
+        </observers>
+      </sales_convert_quote_to_order>   
+      
+      <checkout_type_onepage_save_order_after>
+          <observers>
+              <checkout_type_onepage_save_order_after_handler>
+                  <class>qixol/observer</class>
+                  <method>processSavePromotionsToOrder</method>
+              </checkout_type_onepage_save_order_after_handler>
+          </observers>
+      </checkout_type_onepage_save_order_after>
+            
+      <controller_action_predispatch_checkout_cart_couponPost>
+          <observers>
+              <controller_action_before>
+                  <type>model</type>
+                  <class>qixol/observer</class>
+                  <method>checkQixolCoupon</method>
+              </controller_action_before>
+          </observers>
+      </controller_action_predispatch_checkout_cart_couponPost>
+      <controller_action_predispatch_checkout_cart_delete>
+          <observers>
+              <controller_action_before>
+                  <type>model</type>
+                  <class>qixol/observer</class>
+                  <method>deleteCartAction</method>
+              </controller_action_before>
+          </observers>
+      </controller_action_predispatch_checkout_cart_delete>      
+      <controller_action_predispatch_checkout_cart_updatePost>
+          <observers>
+              <controller_action_before>
+                  <type>model</type>
+                  <class>qixol/observer</class>
+                  <method>updateCartPostAction</method>
+              </controller_action_before>
+          </observers>
+      </controller_action_predispatch_checkout_cart_updatePost>
+      <controller_action_predispatch_checkout_cart_ajaxUpdate>
+          <observers>
+              <controller_action_before>
+                  <type>model</type>
+                  <class>qixol/observer</class>
+                  <method>updateCartAjaxUpdate</method>
+              </controller_action_before>
+          </observers>
+      </controller_action_predispatch_checkout_cart_ajaxUpdate>
+      <controller_action_predispatch_checkout_cart_ajaxDelete>
+          <observers>
+              <controller_action_before>
+                  <type>model</type>
+                  <class>qixol/observer</class>
+                  <method>updateCartAjaxDelete</method>
+              </controller_action_before>
+          </observers>
+      </controller_action_predispatch_checkout_cart_ajaxDelete>
+      </events>
+  </global>
+  <admin>
+	<routers>
+	  <qixol_admin>
+	    <use>admin</use>
+		   <args>
+		     <module>Holbi_Qixol</module>
+		     <frontName>qixol_admin</frontName>
+		   </args>
+	  </qixol_admin>
+	</routers>
+  </admin>
+  <adminhtml>
+	<menu>
+	  <qixol module="qixol">
+		<title>Qixol</title>
+		<sort_order>100</sort_order>
+		<children>
+      <banner module="qixol">
+          <title>Manage Banners</title>
+          <sort_order>1</sort_order>
+          <action>qixol_admin/adminhtml_banner</action>
+      </banner>
+      <sticker module="qixol">
+          <title>Manage Stickers</title>
+          <sort_order>1</sort_order>
+          <action>qixol_admin/adminhtml_sticker</action>
+      </sticker>
+      <bannerboxes module="qixol">
+          <title>Manage Banner Position</title>
+          <sort_order>5</sort_order>
+          <action>qixol_admin/adminhtml_bannerboxes</action>
+      </bannerboxes>      
+		  <qixolbackend module="qixol">
+			<title>Qixol</title>
+			<sort_order>3</sort_order>
+			<action>qixol_admin/adminhtml_qixolbackend</action>
+		  </qixolbackend>    
+      <shippingmap module="qixol">
+          <title>Manage Shippings Map</title>
+          <sort_order>15</sort_order>
+          <action>qixol_admin/adminhtml_shippingmap</action>
+      </shippingmap> 
+      <storesmap module="qixol">
+          <title>Manage Stores Map</title>
+          <sort_order>15</sort_order>
+          <action>qixol_admin/adminhtml_storesmap</action>
+      </storesmap> 
+      <customergrouspmap module="qixol">
+          <title>Customer Groups Map</title>
+          <sort_order>25</sort_order>
+          <action>qixol_admin/adminhtml_customergrouspmap</action>
+      </customergrouspmap>               
+		</children>
+	  </qixol>
+
+    <promo>
+      <disabled>1</disabled>
+      <children>
+         <quote>
+          <disabled>1</disabled>
+        </quote>
+         <catalog>
+          <disabled>1</disabled>
+        </catalog>        
+     </children>
+   </promo>
+   
+	</menu>
+	<acl>
+	  <resources>
+		<all>
+		  <title>Allow Everything</title>
+		</all>
+		<admin>
+		  <children>
+			<qixol translate="title" module="qixol">
+			  <title>Qixol</title>
+			  <sort_order>1000</sort_order>
+			  <children>
+		  <qixolbackend translate="title">
+			<title>Qixol</title>
+		  </qixolbackend>
+			  </children>
+			</qixol>
+		  </children>
+		</admin>
+	  </resources>
+	</acl>
+	<layout>
+	  <updates>
+		<qixol>
+		  <file>qixol.xml</file>
+		</qixol>
+	  </updates>
+	</layout>
+        <translate>
+            <modules>
+                <Holbi_Qixol>
+                    <files>
+                        <default>Holbi_Qixol.csv</default>
+                    </files>
+                </Holbi_Qixol>
+            </modules>
+        </translate>  
+  </adminhtml>    
+  
+  <frontend>  
+    <routers>
+      <qixol>
+          <use>standard</use>
+          <args>
+              <module>Holbi_Qixol</module>
+              <frontName>qixol</frontName>
+          </args>
+      </qixol>
+    </routers>
+    <layout>
+      <updates>
+      <qixol>
+        <file>qixol.xml</file>
+      </qixol>
+      </updates>
+    </layout>
+        <translate>
+            <modules>
+                <Holbi_Qixol>
+                    <files>
+                        <default>Holbi_Qixol.csv</default>
+                    </files>
+                </Holbi_Qixol>
+            </modules>
+        </translate>    
+  </frontend>
+  
+    <crontab>
+        <jobs>            
+			<qixol_runexportsynch>
+                <schedule><cron_expr>* */2 * * *</cron_expr></schedule>
+                <run><model>qixol/cron::runExportSynch</model></run>
+      </qixol_runexportsynch>
+      <qixol_runimportpromosynch>
+                <schedule><cron_expr>*/15 * * * *</cron_expr></schedule>
+                <run><model>qixol/cron::runImportProductPromotionSynch</model></run>
+      </qixol_runimportpromosynch>      
+        </jobs>
+    </crontab>
+</config> 

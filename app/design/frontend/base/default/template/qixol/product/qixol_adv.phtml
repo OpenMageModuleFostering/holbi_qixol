@@ -1,0 +1,44 @@
+<?php
+       if (Mage::getStoreConfig('holbi/qixol/enabled')>0&&Mage::getStoreConfig('qixol/frontend/showpromocat')>0){
+                $_productCollection=$this->getLoadedProductCollection();
+                $qixol_bannerbox_category_top=Mage::getModel('qixol/bannerboxes')->load('CATEGORY_TOP');
+           if ($qixol_bannerbox_category_top->getBannerBoxIsActive()>0){
+            $qixol_advertisment=Mage::getModel('qixol/advert');
+            $qixol_top_advertisment_text=$qixol_advertisment->getCategoryTopAdv($_productCollection);
+            $qixol_catalog_all_scripts_inside='';
+            if (trim($qixol_top_advertisment_text)!=''){               
+                $qixol_catalog_all_scripts_inside.='$(".category-title").after("<div id=category_top_ class=\'cycle-slideshow\' data-cycle-fx=\''.$qixol_bannerbox_category_top->getBannerBoxTranslationType().'\' data-cycle-timeout=\'1500\' data-cycle-slides=\'> div\'>'.addslashes(preg_replace("/[\n\r]+/","",$qixol_top_advertisment_text)).'</div>");$(\'#category_top_\').cycle();';
+            ?>
+            <?php
+            }
+           }
+
+            $qixol_bannerbox_category_stickers=Mage::getModel('qixol/bannerboxes')->load('CATEGORY_STICKERS');
+           if ($qixol_bannerbox_category_stickers->getBannerBoxIsActive()>0){
+
+                $_helper = $this->helper('catalog/output');
+                foreach ($_productCollection as $_product){
+                  if ($is_sticker_image=$qixol_advertisment->isSticked($_product,'category')){
+                      if ($is_sticker_image!==false){
+                          if (is_array($is_sticker_image)){
+                            $images_list='';
+                            foreach ($is_sticker_image as $image_add){
+                               $images_list.='<div style=\'width: 44px; height: 44px; display: block; z-index: 2; background:url(\"'.$image_add.'\") 0 0 no-repeat;background-size:contain;\'></div>';
+                            }
+                            if ($images_list!='')
+                              $qixol_catalog_all_scripts_inside.='$("#product-collection-image-'.$_product->getId().'").after("<div style=\'position: absolute; right: 65; top: 0; width: 44px; height: 44px; display: block; z-index: 2;\' id=stickers_'.$_product->getId().' class=\'cycle-slideshow\' data-cycle-fx=\''.$qixol_bannerbox_category_stickers->getBannerBoxTranslationType().'\' data-cycle-timeout=\'555\' data-cycle-slides=\'> div\'>'.$images_list.'</div>");$(\'#stickers_'.$_product->getId().'\').cycle();';
+                          }else {
+                           //$qixol_catalog_all_scripts_inside.='$("#product-collection-image-'.$_product->getId().'").after("<div class=\'background_promotion_sale\'></div>");';
+                            $qixol_catalog_all_scripts_inside.='$("#product-collection-image-'.$_product->getId().'").after("<div style=\'position: absolute; right: 65; top: 0; width: 44px; height: 44px; display: block; z-index: 2; background:url(\"'.$is_sticker_image.'\") 0 0 no-repeat;background-size:contain;\'></div>");';
+                          }
+                      }
+                  }       
+                } 
+            }
+            if ($qixol_catalog_all_scripts_inside!=''){
+             ?><script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>lib/jquery/jquery-1.10.2.min.js"></script><script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>/skin/frontend/base/default/js/lib/jquery.cycle2.min.js"></script><script type="text/javascript">$.noConflict();jQuery( document ).ready(function( $ ) { <?php echo $qixol_catalog_all_scripts_inside;?>});</script><?php
+            }
+
+}
+?>
+

@@ -1,0 +1,10 @@
+<?php
+$customerId = Mage::getModel('customer/session')->getCustomerId();
+$customerPoints = Mage::getModel('qixol/Bonuspoints')->load($customerId);
+?>
+Your Points: <?= sprintf('%d',$customerPoints->getCurrentPoints()); ?>
+<br/>
+Total Points Accumulated: <?= sprintf('%d',$customerPoints->getEarnedPoints()); ?>
+<br/>
+Total Points Spent: <?= sprintf('%d',$customerPoints->getSpentPoints()); ?>
+<br/>

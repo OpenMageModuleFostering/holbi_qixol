@@ -1,0 +1,38 @@
+<?php
+          $order = $this->getOrder();
+          $promotions_raw=$order->getPromotionDataApplied();
+           $inline_item_advert='';
+          if(strlen($promotions_raw)>3){
+                $promotions_data_array=unserialize($promotions_raw);
+                if (is_array($promotions_data_array['items'])&&count($promotions_data_array['items'])>0){
+
+                foreach ($order->getAllItems() as $item) {
+                    if (isset($promotions_data_array['items'][$item->getQuoteItemId()]['promotions'])){
+                       foreach ($promotions_data_array['items'][$item->getQuoteItemId()]['promotions'] as $promotion_data){
+                          if ($promotion_data['description']!=''){
+                                      $inline_item_advert.="$('<div class=\"order_inline_item_advert\" style=\"font-weight:bold;color:#6666FF\">".$promotion_data['description']."</div>').appendTo($('#order_item_".$item->getId()."'));"; 
+                          }
+                       }
+                    }
+;
+                }
+
+if (isset($promotions_data_array['promotion_summary'])){
+foreach ($promotions_data_array['promotion_summary']  as $inline_cart_promotion)
+  if($inline_cart_promotion['data']['basketlevel']>0){
+        switch ($inline_cart_promotion['data']['type']){
+        case 'ISSUEPOINTS';
+              $inline_item_advert.="$('<div class=\"order_total_advert\" style=\"font-weight:bold;color:#6666FF\">".$inline_cart_promotion['data']['issuedpoints']."&nbsp;pt."."</div>').appendTo($('#order-totals'));";  
+        break;
+        }
+  }
+}
+
+
+?><script type="text/javascript" src="http://qixol.holbidev.co.uk/js/lib/jquery/jquery-1.10.2.min.js"></script><script type="text/javascript">$.noConflict();jQuery( document ).ready(function( $ ) { <?php 
+echo $inline_item_advert;
+?>});</script><?php 
+
+          }
+          }
+?>

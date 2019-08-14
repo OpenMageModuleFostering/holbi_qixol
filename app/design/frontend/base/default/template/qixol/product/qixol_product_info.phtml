@@ -1,0 +1,63 @@
+<?php
+if (Mage::getStoreConfig('holbi/qixol/enabled')>0){
+?>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<?php
+$qixol_advertisment=Mage::getModel('qixol/advert');
+$qixol_product_all_scripts_inside='';
+
+if (Mage::getStoreConfig('qixol/frontend/showpromoboxes')>0){
+ $qixol_all_promotions_text=$qixol_advertisment->getAllProductAdv($_product);
+
+  if ($qixol_all_promotions_text!=''){
+//    $qixol_product_all_scripts_inside .= '$(".add-to-box").after("<div id=product_advertisment_ class=\'cycle-slideshow\' data-cycle-fx=\'scrollHorz\' data-cycle-timeout=\'1500\' data-cycle-slides=\'> div\'>'.preg_replace("/[\n\r]+/","",$qixol_all_promotions_text).'</div>"); $(\'#product_advertisment_\').cycle();';
+      $qixol_product_all_scripts_inside .= '$(".add-to-box").after("<div class=\'product_all_promotions\'><table style=\'width:100%\'><th>Offers</th><th style=\'width:100px;\'>You Save</th>'.preg_replace("/[\n\r]+/","",$qixol_all_promotions_text).'</div></table>");';
+  }
+}
+if (Mage::getStoreConfig('qixol/frontend/showpromoboxes')>0){
+
+
+$qixol_product_top_box=Mage::getModel('qixol/bannerboxes')->load('PRODUCT_TOP');
+if ($qixol_product_top_box->getBannerBoxIsActive()>0){
+  $qixol_top_advertisment_text=$qixol_advertisment->getProductInfoTopAdv($_product);
+
+  if ($qixol_top_advertisment_text!=''){
+    $qixol_product_all_scripts_inside .= '$("#messages_product_view").after("<div id=product_top_ class=\'cycle-slideshow\' data-cycle-fx=\''.$qixol_product_top_box->getBannerBoxTranslationType().'\' data-cycle-timeout=\'1500\' data-cycle-slides=\'> div\'>'.preg_replace("/[\n\r]+/","",$qixol_top_advertisment_text).'</div>"); $(\'#product_top_\').cycle();';
+  }
+}
+
+$qixol_product_inline_box=Mage::getModel('qixol/bannerboxes')->load('PRODUCT_INLINE');
+
+if ($qixol_product_inline_box->getBannerBoxIsActive()>0){
+  $qixol_inline_advertisment_text=$qixol_advertisment->getProductInlineAdv($_product);
+
+  if ($qixol_inline_advertisment_text!=''){
+    $qixol_product_all_scripts_inside .= '$(".extra-info").after("<div=\'product_inline\' style=\'float: left;width: 100%;\' id=product_inline_ class=\'cycle-slideshow\' data-cycle-fx=\''.$qixol_product_inline_box->getBannerBoxTranslationType().'\' data-cycle-timeout=\'1500\' data-cycle-slides=\'> div\'>'.addslashes($qixol_inline_advertisment_text).'</div>");$(\'#product_inline_\').cycle();';
+  }
+}
+}
+if (Mage::getStoreConfig('qixol/frontend/showpromoprod')>0&&$is_sticker_image=$qixol_advertisment->isSticked($_product,'product')){
+    $qixol_bannerbox_product_stickers=Mage::getModel('qixol/bannerboxes')->load('PRODUCT_INFO_STICKERS');
+    if ($qixol_bannerbox_product_stickers->getBannerBoxIsActive()>0){
+    if ($is_sticker_image!==false){
+    if (is_array($is_sticker_image)){
+       $images_list='';
+        foreach ($is_sticker_image as $image_add){
+          $images_list.='<div style=\'position: absolute; right: 65; top: 0; width: 200px; height: 200px; display: block; z-index: 2; background:url(\"'.$image_add.'\") 0 0 no-repeat;background-size:contain;\'></div>';
+        }
+        if ($images_list!='')
+          $qixol_product_all_scripts_inside.='$(".product-image-gallery").after("<div style=\'position: absolute; right: 65; top: 0; width: 200px; height: 200px; display: block; z-index: 2;\' id=stickers_ class=\'cycle-slideshow\' data-cycle-fx=\''.$qixol_bannerbox_product_stickers->getBannerBoxTranslationType().'\' data-cycle-timeout=\'555\' data-cycle-slides=\'> div\'>'.$images_list.'</div>");$(\'#stickers_\').cycle();';
+
+    } else {
+      $qixol_product_all_scripts_inside.='$(".product-image-gallery").after("<div style=\'position: absolute; right: 65; top: 0; width: 200px; height: 200px; display: block; z-index: 2; background:url(\"'.$is_sticker_image.'\") 0 0 no-repeat;\'></div>");';
+    }
+
+    }
+    }
+}  
+
+if ($qixol_product_all_scripts_inside!=''){
+?><script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>lib/jquery/jquery-1.10.2.min.js"></script><script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>/skin/frontend/base/default/js/lib/jquery.cycle2.min.js"></script><script type="text/javascript">$.noConflict();jQuery( document ).ready(function( $ ) { <?php echo $qixol_product_all_scripts_inside;?>});</script><?php
+}
+}

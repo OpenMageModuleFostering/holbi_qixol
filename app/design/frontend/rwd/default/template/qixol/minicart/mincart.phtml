@@ -1,0 +1,250 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     rwd_default
+ * @copyright   Copyright (c) 2006-2015 X.commerce, Inc. (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Shoping cart sidebar
+ *
+ * @var Mage_Checkout_Block_Cart_Minicart $this
+ */
+?>
+<?php
+$_cartQty = $this->getSummaryCount();
+if(empty($_cartQty)) {
+    $_cartQty = 0;
+}
+?>
+<div id="minicart-error-message" class="minicart-message"></div>
+<div id="minicart-success-message" class="minicart-message"></div>
+
+<div class="minicart-wrapper">
+
+    <p class="block-subtitle">
+        <?php echo $this->__('Recently added item(s)') ?>
+        <a class="close skip-link-close" href="#" title="<?php echo $this->quoteEscape($this->__('Close')); ?>">&times;</a>
+    </p>
+
+    <?php $_items = $this->getRecentItems() ?>
+    <?php $countItems = count($_items); ?>
+    <?php if($countItems): ?>
+        <div>
+            <ul id="cart-sidebar" class="mini-products-list">
+                <?php foreach($_items as $_item): ?>
+<?php
+//{{qixol start wrap block
+if ((int)Mage::getStoreConfig('qixol/frontend/mcartjavascr')==0&&($_SESSION['qixol_quoted_items']['items'][$_item->getId()]['free_added']>0)){
+             $multiple_coeff=((float)$_SESSION['qixol_quoted_items']['items'][$_item->getId()]['data']['quantity']/(float)$_item->getQty());
+             $_item->setQty((string)$_SESSION['qixol_quoted_items']['items'][$_item->getId()]['data']['quantity']);
+             //$_item->setPrice($_item->getPrice()*$multiple_coeff);
+             //$_item->setBasePrice($_item->getBasePrice()*$multiple_coeff);
+             //$_item->setPriceInclTax($_item->getPriceInclTax()*$multiple_coeff);
+             //$_item->setBasePriceInclTax($_item->getBasePriceInclTax()*$multiple_coeff);
+             //$_item->setBasePriceInclTax($_item->getBasePriceInclTax()*$multiple_coeff);
+             $_item->setRowTotal($_item->getRowTotal()*$multiple_coeff);
+             $_item->setBaseRowTotal($_item->getBaseRowTotal()*$multiple_coeff);
+             $_item->setRowTotalInclTax($_item->getRowTotalInclTax()*$multiple_coeff);
+             $_item->setBaseRowTotalInclTax($_item->getBaseRowTotalInclTax()*$multiple_coeff);
+
+
+             unset($multiple_coeff);
+}
+// }} qixol
+?>
+                    <?php echo $this->getItemHtml($_item) ?>
+                <?php endforeach; ?>
+<?php
+//{{qixol start wrap block
+
+if (isset($_SESSION['qixol_quoted_items'])){
+foreach ($_SESSION['qixol_quoted_items']['items']  as $idx_cart=>$item_to_show){
+    if ($item_to_show['new']>0&&(int)$item_to_show['data']['isdelivery']==0&&(int)$item_to_show['data']['splitfromlineid']==0){
+          if ($productId=Mage::getModel('catalog/product')->getIdBySku((string)$item_to_show['data']['variantcode']!=''?(string)$item_to_show['data']['variantcode']:(string)$item_to_show['data']['productcode'])){
+             $productObj = Mage::getModel('catalog/product')->load($productId);
+             $quoteItem = Mage::getModel('sales/quote_item')->setStoreId(Mage::app()->getStore()->getId())->setProduct($productObj);
+             $quoteItem->setConvertedPrice((string)$item_to_show['data']['price']);
+             $quoteItem->setQty((string)$item_to_show['data']['quantity']);
+             $quoteItem->setFreeProduct((int)$item_to_show['free_added']);
+             $quoteItem->setQuote($this);
+             $quoteItem->setId($idx_cart);
+             echo $this->getItemHtml($quoteItem);
+          }
+    }
+}
+if (isset($_SESSION['qixol_quoted_items']['summary'])){
+foreach ($_SESSION['qixol_quoted_items']['summary']  as $inline_cart_promotion)
+  if($inline_cart_promotion['data']['basketlevel']>0){
+?>
+<li class="item odd" xmlns="http://www.w3.org/1999/html">
+    <div class="promotion_cart_inline_box" ><?php echo $inline_cart_promotion['data']['display_text'] ?>&nbsp;&nbsp;:&nbsp;&nbsp;<?php 
+switch ($inline_cart_promotion['data']['type']){
+case 'DELIVERYREDUCTION';
+      echo $this->helper('checkout')->formatPrice($inline_cart_promotion['data']['discountamount']); 
+break;
+case 'ISSUEPOINTS';
+      echo $inline_cart_promotion['data']['issuedpoints']."&nbsp;pt."; 
+break;
+case 'BASKETREDUCTION';
+      echo $this->helper('checkout')->formatPrice($inline_cart_promotion['data']['discountamount']); 
+break;
+}
+?></div>
+</li>
+<?
+  }
+}
+}
+//}} qixol end wrap block
+?>
+            </ul>
+        </div>
+        <script type="text/javascript">
+            truncateOptions();
+            decorateList('cart-sidebar', 'none-recursive');
+            $j('document').ready(function() {
+                var minicartOptions  = {
+                    formKey:           "<?php echo $this->getFormKey();?>"
+                }
+                var Mini = new Minicart(minicartOptions);
+                Mini.init();
+            });
+        </script>
+
+        <div id="minicart-widgets">
+            <?php echo $this->getChildHtml('cart_promotion') ?>
+        </div>
+        <div class="block-content">
+            <p class="subtotal">
+                <?php if ($this->canApplyMsrp()): ?>
+                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
+                <?php else: ?>
+                    <span class="label"><?php echo $this->__('Cart Subtotal:') ?></span> <?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?>
+                    <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?>
+                        <br />(<?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?>)
+                    <?php endif; ?>
+                <?php endif; ?>
+            </p>
+        </div>
+
+
+        <div class="minicart-actions">
+            <?php if($_cartQty && $this->isPossibleOnepageCheckout()): ?>
+                <ul class="checkout-types minicart">
+                    <?php echo $this->getChildHtml('extra_actions') ?>
+                    <li>
+                        <a title="<?php echo $this->quoteEscape($this->__('Checkout')) ?>" class="button checkout-button" href="<?php echo $this->getCheckoutUrl() ?>">
+                            <?php echo $this->__('Checkout') ?>
+                        </a>
+                    </li>
+                </ul>
+            <?php endif ?>
+            <a class="cart-link" href="<?php echo $this->getUrl('checkout/cart'); ?>">
+                <?php echo $this->__('View Shopping Cart'); ?>
+            </a>
+        </div>
+
+    <?php else: ?>
+        <p class="empty"><?php echo $this->__('You have no items in your shopping cart.') ?></p>
+
+    <?php endif ?>
+</div>
+<!-- // qixol //-->
+<?php
+         //$place_box_in_design_after_pattern=Mage::getStoreConfig('qixol/integraion/boxcartpromotion')
+         $place_box_in_design_after_pattern='.cart';
+
+
+         $cart_advertisment_=Mage::getModel('qixol/advert');
+         $text_to_show_cart_adv=$cart_advertisment_->getCartInlineAdv();
+
+         $inline_cart_advert='';
+
+         //for cart items
+          $cart = Mage::getModel('checkout/cart')->getQuote();
+          foreach ($cart->getAllItems() as $item) {
+              if (isset($_SESSION['qixol_quoted_items'])&&isset($_SESSION['qixol_quoted_items']['items'][$item->getId()])){
+                  if ((int)Mage::getStoreConfig('qixol/frontend/mcartjavascr')>0  && Mage::getStoreConfig('qixol/advanced/services')!='dontdisplay' &&
+                                     isset($_SESSION['qixol_quoted_items']['items'][$item->getId()]['promotions']))
+                     foreach ($_SESSION['qixol_quoted_items']['items'][$item->getId()]['promotions'] as $promotion){
+
+//inline level promotion
+if ((int)$promotion['basketlevel']==0&&isset($_SESSION['qixol_quoted_items']['summary'][$promotion['id']])&&Mage::getStoreConfig('qixol/advanced/services')=='displayname'){
+  $inline_cart_advert.="$('<div class=\"cart_inline_item_promo\">".addslashes($_SESSION['qixol_quoted_items']['summary'][$promotion['id']]['data']['display_text'])."</div>').appendTo($('#qixol_idx_cart_item_name_".$item->getId()."'));";
+} elseif((int)$promotion['basketlevel']==0&&(Mage::getStoreConfig('qixol/advanced/services')=='displaytext'||Mage::getStoreConfig('qixol/advanced/services')=='displaytype')) {
+  if ($cart_promotion_data=Mage::getModel('qixol/promotions')->load($promotion['id'])){
+      $inline_cart_advert.="$('<div class=\"cart_inline_item_promo\">".addslashes(Mage::getStoreConfig('qixol/advanced/services')=='displaytype'?$cart_promotion_data->getPromotionType():$cart_promotion_data->getPromotionText())."</div>').appendTo($('#qixol_idx_cart_item_name_".$item->getId()."'));";
+  }
+}
+
+//basket level promotion
+if ((int)$promotion['basketlevel']==1&&isset($_SESSION['qixol_quoted_items']['summary'][$promotion['id']]))
+        $text_to_show_cart_adv.='';//should be also added??? $_SESSION['qixol_quoted_items']['summary'][$promotion['id']]['display_text'];
+
+                     }
+
+//if quantity changed (get one + one free so will be splited to 2 products with 1 free)
+if ((int)Mage::getStoreConfig('qixol/frontend/mcartjavascr')>0&&$_SESSION['qixol_quoted_items']['items'][$item->getId()]['updated_qty']>0)
+$inline_cart_advert.="$('<div class=\"cart_inline_item_new_qty\">For&nbsp;promo&nbsp;".addslashes($_SESSION['qixol_quoted_items']['items'][$item->getId()]['data']['quantity'])."&nbsp;Qty</div>').appendTo($('#qixol_idx_mcart_item_qty_".$item->getId()."'));"; 
+
+if ((int)Mage::getStoreConfig('qixol/frontend/mcartjavascr')>0&&$_SESSION['qixol_quoted_items']['items'][$item->getId()]['updated_price']>0)
+$inline_cart_advert.="$('<div class=\"cart_inline_item_new_price\">Only for ".addslashes($this->helper('checkout')->formatPrice($_SESSION['qixol_quoted_items']['items'][$item->getId()]['data']['lineamount']))."</div>').appendTo($('#qixol_idx_mcart_item_price_".$item->getId()."'));"; 
+
+              }
+          }
+$total_discount_amount=0;
+if (isset($_SESSION['qixol_quoted_items']['items'])){
+   foreach ($_SESSION['qixol_quoted_items']['items'] as $cart_item_process){
+      if ($cart_item_process['data']['totaldiscount']>0&&$cart_item_process['new']==0&&((int)Mage::getStoreConfig('qixol/advanced/separateitem')>0||$cart_item_process['data']['generated']==false)){
+            $total_discount_amount+=$cart_item_process['data']['totaldiscount'];
+     }
+      //subtotal are not including delivery
+      /*elseif($cart_item_process['data']['totaldiscount']>0&&$cart_item_process['data']['type']=='DELIVERYREDUCTION'){
+            $total_discount_amount+=$cart_item_process['data']['totaldiscount'];
+     }*/
+  }
+
+}
+
+if (isset($_SESSION['qixol_quoted_items']['summary'])){
+   foreach ($_SESSION['qixol_quoted_items']['summary'] as $cart_total_process){
+      if ($cart_total_process['data']['discountamount']>0&&$cart_total_process['data']['type']=='BASKETREDUCTION'){
+            $total_discount_amount+=$cart_total_process['data']['discountamount'];
+      }
+  }
+}
+
+if ($text_to_show_cart_adv!==false&&strlen($text_to_show_cart_adv)>5||$inline_cart_advert!=''){         
+?><script type="text/javascript" src="http://qixol.holbidev.co.uk/js/lib/jquery/jquery-1.10.2.min.js"></script><script type="text/javascript">$.noConflict();jQuery( document ).ready(function( $ ) { <?php 
+//commented -show only on base cart
+/*if ($text_to_show_cart_adv!==false&&strlen($text_to_show_cart_adv)>5)
+echo '$("'.$place_box_in_design_after_pattern.'").after("<div class=\'qixolcartpromo\'>'.$text_to_show_cart_adv.'</div>");';*/
+if ($inline_cart_advert!='')
+echo preg_replace("/[\n\r]+/","",$inline_cart_advert);
+if ($total_discount_amount>0){
+/*?>$('<tr class="qixol_discount"><td class="a-right" colspan="1" > Discount</td><td class="a-right" ><span class="qixol_total_price"><?php echo $this->helper('checkout')->formatPrice($total_discount_amount);; ?></span></td></tr>').appendTo($('#shopping-cart-totals-table tbody'));<?php*/
+?>$('#header-cart .subtotal .price').addClass('qixol_price_cross');$('<?php echo $this->helper('checkout')->formatPrice($cart->getSubtotal()-$total_discount_amount); ?>').appendTo($('#header-cart .subtotal .price').parent());<?php
+}
+?>});</script><?php
+}
+?>

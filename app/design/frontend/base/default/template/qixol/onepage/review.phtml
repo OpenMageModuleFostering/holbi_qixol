@@ -1,0 +1,148 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2006-2015 X.commerce, Inc. (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php echo $this->getChildHtml('items_before'); ?>
+<div id="checkout-review-table-wrapper">
+    <table class="data-table" id="checkout-review-table">
+        <?php if ($this->helper('tax')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
+        <col />
+        <col width="1" />
+        <col width="1" />
+        <col width="1" />
+        <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
+        <col width="1" />
+        <col width="1" />
+        <?php endif; ?>
+        <thead>
+            <tr>
+                <th rowspan="<?php echo $rowspan ?>"><?php echo $this->__('Product Name') ?></th>
+                <th colspan="<?php echo $colspan ?>" class="a-center"><?php echo $this->__('Price') ?></th>
+                <th rowspan="<?php echo $rowspan ?>" class="a-center"><?php echo $this->__('Qty') ?></th>
+                <th colspan="<?php echo $colspan ?>" class="a-center"><?php echo $this->__('Subtotal') ?></th>
+            </tr>
+            <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
+                <tr>
+                    <th class="a-right"><?php echo $this->helper('tax')->getIncExcTaxLabel(false) ?></th>
+                    <th><?php echo $this->helper('tax')->getIncExcTaxLabel(true) ?></th>
+                    <th class="a-right"><?php echo $this->helper('tax')->getIncExcTaxLabel(false) ?></th>
+                    <th><?php echo $this->helper('tax')->getIncExcTaxLabel(true) ?></th>
+                </tr>
+            <?php endif; ?>
+        </thead>
+        <?php echo $this->getChildHtml('totals'); ?>
+        <tbody>
+        <?php foreach($this->getItems() as $_item): ?>
+<?php
+//{{qixol start wrap block
+if ((int)Mage::getStoreConfig('qixol/frontend/onepagejavascr')==0&&($_SESSION['qixol_quoted_items']['items'][$_item->getId()]['free_added']>0)){
+             $multiple_coeff=((float)$_SESSION['qixol_quoted_items']['items'][$_item->getId()]['data']['quantity']/(float)$_item->getQty());
+             $_item->setQty((string)$_SESSION['qixol_quoted_items']['items'][$_item->getId()]['data']['quantity']);
+             //$_item->setPrice($_item->getPrice()*$multiple_coeff);
+             //$_item->setBasePrice($_item->getBasePrice()*$multiple_coeff);
+             //$_item->setPriceInclTax($_item->getPriceInclTax()*$multiple_coeff);
+             //$_item->setBasePriceInclTax($_item->getBasePriceInclTax()*$multiple_coeff);
+             //$_item->setBasePriceInclTax($_item->getBasePriceInclTax()*$multiple_coeff);
+             $_item->setRowTotal($_item->getRowTotal()*$multiple_coeff);
+             $_item->setBaseRowTotal($_item->getBaseRowTotal()*$multiple_coeff);
+             $_item->setRowTotalInclTax($_item->getRowTotalInclTax()*$multiple_coeff);
+             $_item->setBaseRowTotalInclTax($_item->getBaseRowTotalInclTax()*$multiple_coeff);
+
+
+             unset($multiple_coeff);
+}
+//}} qixol
+?>
+            <?php echo $this->getItemHtml($_item)?>
+        <?php endforeach ?>
+<?php
+//{{qixol start wrap block
+
+if (isset($_SESSION['qixol_quoted_items'])){
+foreach ($_SESSION['qixol_quoted_items']['items']  as $idx_cart=>$item_to_show){
+    if ($item_to_show['new']>0&&(int)$item_to_show['data']['isdelivery']==0&&(int)$item_to_show['data']['splitfromlineid']==0){
+          if ($productId=Mage::getModel('catalog/product')->getIdBySku((string)$item_to_show['data']['variantcode']!=''?(string)$item_to_show['data']['variantcode']:(string)$item_to_show['data']['productcode'])){
+             $productObj = Mage::getModel('catalog/product')->load($productId);
+             $quoteItem = Mage::getModel('sales/quote_item')->setStoreId(Mage::app()->getStore()->getId())->setProduct($productObj);
+             $quoteItem->setConvertedPrice((string)$item_to_show['data']['price']);
+             $quoteItem->setQty((string)$item_to_show['data']['quantity']);
+             $quoteItem->setFreeProduct((int)$item_to_show['free_added']);
+             $quoteItem->setQuote($this);
+             $quoteItem->setId($idx_cart);
+             echo $this->getItemHtml($quoteItem);
+          }
+    }
+}
+if (isset($_SESSION['qixol_quoted_items']['summary'])){
+foreach ($_SESSION['qixol_quoted_items']['summary']  as $inline_cart_promotion)
+  if($inline_cart_promotion['data']['basketlevel']>0){
+?>
+<tr class='promotion_review_inline_box'>
+    <td class="product-cart-info" colspan='2'><?php echo $inline_cart_promotion['data']['display_text']."&nbsp;"; ?></td>
+    <td class="product-cart-total" colspan='2' style="text-align:right;"><?php 
+switch ($inline_cart_promotion['data']['type']){
+case 'DELIVERYREDUCTION';
+      echo $this->helper('checkout')->formatPrice($inline_cart_promotion['data']['discountamount']); 
+break;
+case 'ISSUEPOINTS';
+      echo $inline_cart_promotion['data']['issuedpoints']."&nbsp;pt."; 
+break;
+case 'BASKETREDUCTION';
+      echo $this->helper('checkout')->formatPrice($inline_cart_promotion['data']['discountamount']); 
+break;
+}
+?></td>
+</tr>
+<?
+  }
+}
+}
+//}} qixol end wrap block
+?>
+        </tbody>
+    </table>
+</div>
+<?php echo $this->getChildHtml('items_after'); ?>
+<script type="text/javascript">
+//<![CDATA[
+    decorateTable('checkout-review-table');
+    truncateOptions();
+//]]>
+</script>
+<div id="checkout-review-submit">
+    <?php echo $this->getChildHtml('agreements') ?>
+    <div class="buttons-set" id="review-buttons-container">
+        <p class="f-left"><?php echo $this->__('Forgot an Item?') ?> <a href="<?php echo $this->getUrl('checkout/cart') ?>"><?php echo $this->__('Edit Your Cart') ?></a></p>
+        <?php echo $this->getChildHtml('button') ?>
+        <span class="please-wait" id="review-please-wait" style="display:none;">
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo Mage::helper('core')->quoteEscape($this->__('Submitting order information...')) ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Submitting order information...')) ?>" class="v-middle" /> <?php echo $this->__('Submitting order information...') ?>
+        </span>
+    </div>
+    <script type="text/javascript">
+    //<![CDATA[
+        review = new Review('<?php echo $this->getUrl('checkout/onepage/saveOrder', array('form_key' => Mage::getSingleton('core/session')->getFormKey())) ?>', '<?php echo $this->getUrl('checkout/onepage/success') ?>', $('checkout-agreements'));
+    //]]>
+    </script>
+</div>

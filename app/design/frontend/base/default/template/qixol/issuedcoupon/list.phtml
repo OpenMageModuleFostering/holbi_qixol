@@ -1,0 +1,95 @@
+<?php
+
+ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+     $customerData = Mage::getSingleton('customer/session')->getCustomer();
+     $list_coupons_collection=Mage::getModel('qixol/issuedcoupon')->getCustomerIssuedcoupons($customerData->getId());
+
+?>
+<div class="page-title">
+    <h1><?php echo $this->__('Issued Coupons') ?></h1>
+</div>
+<?php if($list_coupons_collection->getSize()): ?>
+
+
+    <table class="data-table">
+        <col width="60" />
+        <col width="60" />
+        <col width="160" />
+        <col />
+        <thead>
+            <tr>
+                <th><?php echo $this->__('Code') ?></th>
+                <th><?php echo $this->__('Status') ?></th>
+                <th><?php echo $this->__('Valid To') ?></th>
+                <th><?php echo $this->__('Description') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach($list_coupons_collection as $item): ?>
+<?php
+
+          $soapclient_coupon = new soapclient('http://evaluation.qixolpromo.com/BasketService.svc?singleWsdl', array('trace' => 1));                                           
+            try {
+                $update_item=false;
+                $result_coupon = $soapclient_coupon->__soapCall('ValidateCouponCode', array('ValidateCouponCode' => array('companyKey' => Mage::getStoreConfig('qixol/integraion/companykey'),'couponCode' => $item->getCouponCodeValue())));
+                $xml_coupon_code_validated=$result_coupon->ValidateCouponCodeResult;
+                if (strlen($xml_coupon_code_validated)>10){
+                      $xml_coupon_object = simplexml_load_string($xml_coupon_code_validated);
+                            foreach ($xml_coupon_object as $xml_coupon_object_root_key=>$xml_coupon_object_object_sub){
+                                  if ($xml_coupon_object_root_key=='summary'){
+                                             $xml_coupon_object_object_coupon_summary=$xml_coupon_object_object_sub->attributes();
+                                             if ($xml_coupon_object_object_coupon_summary['result']=='false'){
+                                                    $item->setIsUsed(1);
+                                                    $update_item=true;
+                                             }
+                                  }
+                                  else if ($xml_coupon_object_root_key=='coupon'){
+                                    foreach ($xml_coupon_object_object_sub as $xml_coupon_object_coupon_key=>$xml_coupon_object_object_coupon){
+                                       if ($xml_coupon_object_coupon_key=='codes'){
+                                           foreach ($xml_coupon_object_object_coupon as $xml_coupon_object_object_coupon_obj){
+                                             $xml_coupon_object_object_coupon_attributes=$xml_coupon_object_object_coupon_obj->attributes();
+                                             if ((string)$xml_coupon_object_object_coupon_attributes['isredeemable']!='true'){
+                                                    $item->setIsUsed(1);
+                                                    $update_item=true;
+                                                }
+                                                 if (date("Y-m-d H:i:s",strtotime((string)$xml_coupon_object_object_coupon_attributes['validto']))!=$item->getCouponValidTill()){
+                                                     $item->setCouponValidTill(date("Y-m-d H:i:s",strtotime((string)$xml_coupon_object_object_coupon_attributes['validto'])));
+                                                    $update_item=true;
+                                                 }                                            
+                                           }
+                                       }
+                                    }
+                                  }
+                              }
+
+                }
+            } catch (SoapFault $e) {
+
+            }
+
+?>
+            <tr>
+                <td><?php echo $item->getCouponCodeValue() ?></td>
+                <td><?php echo (((int)$item->getIsUsed()>0)?($this->__('Inactive')):(($item->getCouponValidTill()!=''&&$item->getCouponValidTill()!='0000-00-00 00:00:00'&&$item->getCouponValidTill()!='1970-01-01 00:00:00'&&strtotime($item->getCouponValidTill())<time())?$this->__('Expired'):$this->__('Active'))) ?></td>
+                <td><?php echo (($item->getCouponValidTill()!='0000-00-00 00:00:00'&&$item->getCouponValidTill()!='1970-01-01 00:00:00')?$item->getCouponValidTill():"Unlimited"); ?></td>
+                <td><?php echo $item->getCouponDescription(); ?></td>
+            </tr>
+<?php
+if ($update_item){
+   $item->save();
+}
+?>
+        <?php endforeach ?>
+        </tbody>
+    </table>
+
+
+<?php else: ?>
+    <p><?php echo $this->__('You are having no issued coupons yet.'); ?></p>
+    <div class="buttons-set">
+        <p class="back-link"><a href="<?php echo $this->getUrl('customer/account') ?>"><small>&laquo; </small><?php echo $this->__('Back - link to the previously viewed page'); ?></a></p>
+    </div>
+<?php endif ?>
+<?php
+}
+?>

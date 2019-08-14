@@ -1,0 +1,407 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <qixol translate="label" module="qixol">
+            <label>Qixol Extension</label>
+            <sort_order>333</sort_order>
+        </qixol>
+    </tabs>
+    <sections>
+         <qixol translate="label">
+            <label>Qixol Setting</label>
+            <tab>qixol</tab>
+            <sort_order>100</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+              <integraion translate="label">
+                    <label>General / Intagration</label>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment><![CDATA[The main configuration]]></comment>
+                    <fields>
+                        <enabled translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <config_path>holbi/qixol/enabled</config_path>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enabled>
+                        <companykey translate="label">
+                            <label>Company Key</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Company key assigned to you when you register in Qixol Promo <a href="http://www.qixolpromo.com">click</a>.]]></comment>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </companykey>      
+                        <services translate="label comment">
+                            <label>Integration Services</label>
+                            <comment>Integration Services</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>qixol/system_config_source_iservices_values</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </services>                        
+                      </fields>                      
+                  </integraion>   
+                  <frontend translate="label">
+                    <label>Front-End Settings</label>
+                    <sort_order>60</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <showpromocat translate="label">
+                            <label>Show promotion sticker in cataloge</label>
+                            <comment>Show promotion stickers on products on cataloge</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </showpromocat>
+                        <showpromoprod translate="label">
+                            <label>Show promotion sticker on product</label>
+                            <comment>Show promotion stickers on the product page</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </showpromoprod>
+                        <showpromoboxes translate="label">
+                            <label>Show promotion boxes</label>
+                            <comment>Show promotion boxes on product page</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </showpromoboxes>                        
+                        <showcartpromobox translate="label">
+                            <label>Show promotion box in cart</label>
+                            <comment>Show cart related only promotion box</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </showcartpromobox>                       
+                        <onepagejavascr translate="label">
+                            <label>Use Javascript onepage update.</label>
+                            <comment>One one page chackout use javascript cart update.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </onepagejavascr>
+                        <cartjavascr translate="label">
+                            <label>Use Javascript cart update.</label>
+                            <comment>Cart confirmation use javascript replace.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cartjavascr>                        
+                        <mcartjavascr translate="label">
+                            <label>Use Javascript topcart update.</label>
+                            <comment>Top cart javascript replace.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </mcartjavascr>      
+                        <showallpromoprod translate="label">
+                            <label>Show available promotions on product page</label>
+                            <comment>Show product related promotions on product page</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </showallpromoprod>                        
+                      </fields>                      
+                  </frontend>  
+              <advanced translate="label">
+                    <label>Advanced</label>
+                    <sort_order>60</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <basketval translate="label">
+                            <label>Basket Validation</label>
+                            <comment>When submitting baskets used selected currency</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </basketval>    
+                        <services translate="label comment">
+                            <label>Shopping Cart Configuration</label>
+                            <comment>Show promotional details</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>qixol/system_config_source_cart_settings</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </services>                        
+                      </fields>                      
+                  </advanced>                 
+                
+                  <syhchronized translate="label">
+                    <label>Synchronized Items</label>
+                    <sort_order>61</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment><![CDATA[Synchronization Config]]></comment>
+                    <fields>
+                        <synchproducts translate="label">
+                            <label>Synchronise Products</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </synchproducts> 
+                        <synchcatproducts translate="label">
+                            <label>Send real Category as categorycode</label>
+                            <comment>Send product categories in  attribute categorycode</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </synchcatproducts>                         
+                        <storeuse translate="label">
+                            <label>Stores</label>
+                            <comment>For stores</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>qixol/system_config_source_stores</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </storeuse>
+                        <synchcustomer translate="label">
+                            <label>Synchronise Customer groups</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </synchcustomer>                        
+                        <synchship translate="label">
+                            <label>Synchronise Shipping Methods</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </synchship>    
+                        <synchcurrency translate="label">
+                            <label>Synchronise Curency Sore List</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </synchcurrency>                          
+                        <synchstores translate="label">
+                            <label>Synchronise Stores</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </synchstores>
+                        <channel translate="label">
+                            <label>Channel</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </channel> 
+                         <storegroup translate="label">
+                            <label>Store Group</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[The channel and store group are used in the store hierarchy submited to Promo.]]></comment>                            
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </storegroup> 
+                        <synchonsaving translate="label">
+                            <label>Synchronise on Saving</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </synchonsaving>                        
+                    </fields>                      
+                 </syhchronized>
+                 
+                  <customers translate="label">
+                    <label>Customers</label>
+                    <sort_order>77</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment><![CDATA[Synchronization Config]]></comment>
+                    <fields>
+                        <list translate="label">
+                            <label>Synch only this types:</label>
+                            <frontend_type>Multiselect</frontend_type>
+                            <source_model>qixol/system_config_source_customers_list</source_model>
+                            <sort_order>14</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </list>                       
+                    </fields>                      
+                 </customers>
+
+                  <shippings translate="label">
+                    <label>Shippings</label>
+                    <sort_order>77</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment><![CDATA[Synchronization Config]]></comment>
+                    <fields>
+                        <onlyactive translate="label">
+                            <label>Only active</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model> 
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </onlyactive>                       
+                        <list translate="label">
+                            <label>Synch only this types:</label>
+                            <frontend_type>Multiselect</frontend_type>
+                            <source_model>qixol/system_config_source_shippings_list</source_model>
+                            <sort_order>14</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </list>                       
+                    </fields>                      
+                 </shippings>
+                 
+                  <productattrib translate="label">
+                    <label>Products Attributes</label>
+                    <sort_order>72</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment><![CDATA[Synchronization Config]]></comment>
+                    <fields>
+                        <attributes translate="label">
+                            <label>Include when synch product:</label>
+                            <frontend_type>checkboxes</frontend_type>
+                            <source_model>qixol/system_config_source_attributes</source_model>
+                            <frontend_model>qixol/adminhtml_system_config_attributes</frontend_model>
+                            <sort_order>14</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attributes>                       
+                    </fields>                      
+                 </productattrib>
+                  <issuedpoints translate="label">
+                    <label>Issued Points</label>
+                    <sort_order>72</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment><![CDATA[Bonus points Config]]></comment>
+                    <fields>
+                        <convertrate translate="label">
+                            <label>Conversion rate</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[will be divided on this value (1/x)]]></comment>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </convertrate>                       
+                    </fields>                      
+                 </issuedpoints>                 
+                <sinch_explort_products translate="label">
+                    <label>Run export products</label>
+                    <frontend_type>text</frontend_type>
+                    <comment>Export products to qixol.</comment>
+                    <sort_order>150</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <start_sinch_export translate="label">
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>qixol/startexportbutton</frontend_model>                            
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </start_sinch_export>
+                    </fields>
+               </sinch_explort_products>      
+                <sinch_import_promotion translate="label">
+                    <label>Run import promotions</label>
+                    <frontend_type>text</frontend_type>
+                    <comment>Import promotions from qixol.</comment>
+                    <sort_order>180</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <start_sinch_import translate="label">
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>qixol/startimportbutton</frontend_model>                            
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </start_sinch_import>
+                    </fields>
+               </sinch_import_promotion>                  
+            </groups>
+        </qixol>
+    </sections>
+</config>

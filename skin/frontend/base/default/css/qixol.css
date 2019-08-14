@@ -1,0 +1,110 @@
+.background_promotion_sale{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 65px;
+    height: 66px;
+    display: block;
+    z-index: 2;
+    background:url(../images/qixol/red_sales_sticker_pv.png) 0 0 no-repeat;
+}  
+.promotion_cart_inline_box {
+  font-weight:bold;
+  color:#00A;
+}
+.promotion_cart_inline_box {
+  font-weight:bold;
+  color:#00A;
+}
+.cart_inline_item_promo {
+  font-weight:bold;
+  color:#00A;  
+}
+.cart_inline_item_new_qty {
+  font-weight:bold;
+  color:#00A;    
+}
+.cart_inline_item_new_price {
+  font-weight:bold;
+  color:#00A;      
+}
+
+.qixol_review_discount{
+    font-weight:bold;
+    color:#00A;
+}
+
+.qixol_review_total_price {
+  font-weight:bold;
+  color:#00A;      
+}
+
+.qixol_total_price{
+  font-weight:bold;
+  color:#00A;      
+  font-family: "Helvetica Neue",Verdana,Arial,sans-serif;  
+}
+
+.qixol_discount{
+  font-weight:bold;
+  color:#00A;
+}
+
+.qixol_grand_total_price{
+  font-weight:bold;
+  color:#00A;  
+  display:block;
+}
+
+
+.qixol_price_cross{
+  font-size: -4pt;
+  text-decoration: line-through;
+}
+
+.promotion_review_inline_box{
+    font-weight:bold;
+    color:#00A;
+}
+
+
+
+/*
+*   iMedia Inc.
+*/
+
+#bonuspoints .input-text{
+float:left;
+border-radius: 0;
+height: 30px;
+margin: 4px 10px 0 0;
+width: 100px; 
+}
+
+#bonuspoints .button-wrapper{
+float: left;
+}
+
+#bonuspoints label{
+float:left;
+font-size: 12px;
+font-weight: 400;
+text-align: left;
+text-transform: uppercase;
+min-width: 90px;
+display: inline-block;
+margin-right: 10px;
+line-height:32px;
+}
+.cycle-slideshow{
+  height:100px;
+}
+.product_all_promotions{
+  width:100%;
+}
+.product_all_promotions table{
+  border:1px solid;
+}
+.product_all_promotions th{
+  background-color:#DDDDEE;
+}
