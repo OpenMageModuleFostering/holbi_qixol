@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/Holbi_Qixol",
+    "name": "OpenMageModuleFostering\/Holbi_Qixol",
     "type": "magento-module",
     "license": "GNU-General-Public-License-(GPL)",
     "homepage": "",
     "description": "Qixol Promo extension",
     "authors": [
-    {
-        "name": "Qixol",
-        "email": "ken.westgate@qixol.com"
-    }
-],
+        {
+            "name": "Qixol",
+            "email": "ken.westgate@qixol.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
